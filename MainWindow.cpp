@@ -2,18 +2,19 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
-{
+{   
     profileManager = NULL;
 
     //Setup designed UI
     setupUi(this);
 
+    //Let's build a database
+
+
     //Updates dateEdit to be today's date
     dateEdit->setDate(QDate::currentDate());
 
     //Load settings file
-
-
 
     //Build connections between buttons
     connect(editProfileButton,SIGNAL(clicked()),this,SLOT(openProfileManager()));

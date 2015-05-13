@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QDialog>
 #include <QString>
-
 #include "ui_ProfileWindow.h"
 #include "settings.h"
 #include "RunningProfile.h"

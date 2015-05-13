@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +21,8 @@ SOURCES +=\
     ProfileWindow.cpp \
     MainWindow.cpp \
     Main.cpp \
-    Athlete.cpp
+    Athlete.cpp \
+    RunnerDatabase.cpp
 
 HEADERS  += \
     settings.h \
@@ -29,7 +31,8 @@ HEADERS  += \
     ProfileWindow.h \
     RunningProfile.h \
     RunningTime.h \
-    RunningEvent.h
+    RunningEvent.h \
+    RunnerDatabase.h
 
 FORMS += \
     MainWindow.ui \
