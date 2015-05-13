@@ -5,14 +5,14 @@ RunningEvent::RunningEvent()
     eventName = "";
 }
 
-RunningEvent::RunningEvent(std::string event, std::string time)
+RunningEvent::RunningEvent(QString event, QString time)
 {
     eventName = event;
     eventTime = convertStringToTime(time);
 }
 
 
-std::string RunningEvent::returnEventName()
+QString RunningEvent::returnEventName()
 {
     return eventName;
 }
@@ -22,7 +22,7 @@ RunningTime RunningEvent::returnTime()
     return eventTime;
 }
 
-void RunningEvent::setName(std::string newName)
+void RunningEvent::setName(QString newName)
 {
     eventName = newName;
 }

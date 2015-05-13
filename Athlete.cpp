@@ -6,7 +6,7 @@ Athlete::Athlete()
     AthleteName = "";
 }
 
-Athlete::Athlete(std::string newName = "")
+Athlete::Athlete(QString newName = "")
 {
     //Paramerterize Constructor
     AthleteName = newName;
@@ -38,12 +38,12 @@ void Athlete::test()
     printEventList();
 }
 
-std::string Athlete::returnName()
+QString Athlete::returnName()
 {
     return AthleteName;
 }
 
-void Athlete::setAthleteName(std::string newName)
+void Athlete::setAthleteName(QString newName)
 {
     AthleteName = newName;
 }
@@ -88,8 +88,6 @@ void Athlete::printEventList()
     {
         for (unsigned int i = 0; i < eventList.size(); i++)
         {
-            RunningEvent currentEvent = eventList.at(i);
-            std::cout << currentEvent.returnEventName() << ": " << currentEvent.returnTime() << std::endl;
         }
     }
     else

@@ -7,7 +7,7 @@
 */
 
 
-#include <string>
+#include <QString>
 #include <vector>
 #include "RunningEvent.h"
 
@@ -19,11 +19,11 @@ class Athlete
 {
     public:
         Athlete();
-        Athlete(std::string);
+        Athlete(QString);
         void test();
         virtual ~Athlete();
-        std::string returnName();
-        void setAthleteName(std::string);
+        QString returnName();
+        void setAthleteName(QString);
         std::vector<RunningEvent> returnRunningEvents();
         void addToEventList(RunningEvent);
         bool removeEvent(unsigned int);
@@ -31,7 +31,7 @@ class Athlete
         void clearEventList();
     protected:
     private:
-        std::string AthleteName;
+        QString AthleteName;
         std::vector<RunningEvent> eventList;
 };
 

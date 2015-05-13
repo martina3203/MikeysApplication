@@ -8,15 +8,15 @@ class RunningEvent
 {
     public:
         RunningEvent();
-        RunningEvent(std::string,std::string);
+        RunningEvent(QString,QString);
         virtual ~RunningEvent();
-        void setName(std::string);
+        void setName(QString);
         void setTime(RunningTime);
-        std::string returnEventName();
+        QString returnEventName();
         RunningTime returnTime();
     protected:
     private:
-        std::string eventName;
+        QString eventName;
         RunningTime eventTime;
 
 };

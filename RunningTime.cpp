@@ -253,17 +253,17 @@ std::ostream& operator << (std::ostream& Output,RunningTime theTime)
     return Output;
 }
 
-RunningTime convertStringToTime(std::string timeString)
+RunningTime convertStringToTime(QString timeString)
 {
     //Time shall be given in a format where it contains all 00:00:00.0 or some of these components
     //This function will parse through the strings and study the format for it and construct a RunningTime object
     //that contains the given information
     //Information is gathered in segments between each of the different punctation marks
     RunningTime convertedTime;
-    std::string timeSegment;
+    QString timeSegment;
     int colonCounter = 0;
     bool periodFound = false;
-    for (unsigned int i = 0; i < timeString.size(); i++)
+    for (int i = 0; i < timeString.size(); i++)
     {
         if (timeString.at(i) == ':')
         {
@@ -286,7 +286,7 @@ RunningTime convertStringToTime(std::string timeString)
             timeSegment = timeSegment + timeString.at(currentPosition);
             currentPosition++;
         }
-        std::istringstream(timeSegment) >> convertedNumber;
+        convertedNumber = timeSegment.toInt();
         convertedTime.setHours(convertedNumber);
         convertedNumber = 0;
     }
@@ -303,7 +303,7 @@ RunningTime convertStringToTime(std::string timeString)
             timeSegment = timeSegment + timeString.at(currentPosition);
             currentPosition++;
         }
-        std::istringstream(timeSegment) >> convertedNumber;
+        convertedNumber = timeSegment.toInt();
         convertedTime.setMinutes(convertedNumber);
         convertedNumber = 0;
     }
@@ -320,7 +320,7 @@ RunningTime convertStringToTime(std::string timeString)
             currentPosition++;
         }
         timeSegment = timeSegment + timeString.at(currentPosition);
-        std::istringstream(timeSegment) >> convertedNumber;
+        convertedNumber = timeSegment.toInt();
         convertedTime.setSeconds(convertedNumber);
         convertedNumber = 0;
     }
@@ -333,7 +333,7 @@ RunningTime convertStringToTime(std::string timeString)
             timeSegment = timeSegment + timeString.at(i);
         }
         timeSegment = timeSegment + timeString.at(currentPosition);
-        std::istringstream(timeSegment) >> convertedNumber;
+        convertedNumber = timeSegment.toInt();
         convertedTime.setMiliseconds(convertedNumber);
     }
     //Otherwise it remains zero, by default

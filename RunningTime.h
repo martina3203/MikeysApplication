@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <QString>
 
 /*
     Contains the RunningTime class. Purpose of this class is to store time intervals of any kind.
@@ -38,6 +39,6 @@ class RunningTime
 //Ostream for Time
 std::ostream& operator << (std::ostream&,const RunningTime);
 
-RunningTime convertStringToTime(std::string);
+RunningTime convertStringToTime(QString);
 
 #endif // RunningTime_H
