@@ -17,7 +17,7 @@ RunnerDatabase::RunnerDatabase()
 
     //Create tables as necessary
     QSqlQuery databaseQuery;
-    if (!databaseQuery.exec("CREATE TABLE stupid (poop int);"))
+    if (!databaseQuery.exec("CREATE TABLE Runners (poop int);"))
     {
         qDebug() << "Failed to Create Table";
     }
