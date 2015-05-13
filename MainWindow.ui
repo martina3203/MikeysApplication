@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>869</width>
+    <height>681</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Running Tracker</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="DataAndProfileHorizontal">
+      <item>
+       <widget class="QGroupBox" name="dateBox">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Select Date:</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinAndMaxSize</enum>
+         </property>
+         <item>
+          <widget class="QDateEdit" name="dateEdit">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="dateTime">
+            <datetime>
+             <hour>0</hour>
+             <minute>0</minute>
+             <second>0</second>
+             <year>2015</year>
+             <month>1</month>
+             <day>1</day>
+            </datetime>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="topSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>5</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="profileBox">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Actions:</string>
+        </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>281</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QPushButton" name="editProfileButton">
+            <property name="text">
+             <string>Edit Profiles</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="workoutButton">
+            <property name="text">
+             <string>Add/Edit Workout</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="selectedProfileAndEntriesHorizontal">
+      <item>
+       <widget class="QTabWidget" name="timeViewTabs">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="viewTab">
+         <attribute name="title">
+          <string>View</string>
+         </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777207</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Records on Selected Day:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidget">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>130</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>Distance</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Sprinters</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Entries on that Profile:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="tableWidget">
+              <property name="minimumSize">
+               <size>
+                <width>900</width>
+                <height>0</height>
+               </size>
+              </property>
+              <row>
+               <property name="text">
+                <string>Aaron Martin</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>George</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Brad</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Slow Romanian Guy</string>
+               </property>
+              </row>
+              <column>
+               <property name="text">
+                <string>400</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>400</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>800</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>400</string>
+               </property>
+              </column>
+              <item row="0" column="0">
+               <property name="text">
+                <string>1:07</string>
+               </property>
+              </item>
+              <item row="0" column="1">
+               <property name="text">
+                <string>1:08</string>
+               </property>
+              </item>
+              <item row="0" column="2">
+               <property name="text">
+                <string>2:40</string>
+               </property>
+              </item>
+              <item row="0" column="3">
+               <property name="text">
+                <string>1:06</string>
+               </property>
+              </item>
+              <item row="1" column="0">
+               <property name="text">
+                <string>1:08</string>
+               </property>
+              </item>
+              <item row="1" column="1">
+               <property name="text">
+                <string>1:07</string>
+               </property>
+              </item>
+              <item row="1" column="2">
+               <property name="text">
+                <string>2:38</string>
+               </property>
+              </item>
+              <item row="1" column="3">
+               <property name="text">
+                <string>1:07</string>
+               </property>
+              </item>
+              <item row="2" column="0">
+               <property name="text">
+                <string>1:09</string>
+               </property>
+              </item>
+              <item row="2" column="1">
+               <property name="text">
+                <string>1:09</string>
+               </property>
+              </item>
+              <item row="2" column="2">
+               <property name="text">
+                <string>2:35</string>
+               </property>
+              </item>
+              <item row="2" column="3">
+               <property name="text">
+                <string>1:05</string>
+               </property>
+              </item>
+              <item row="3" column="0">
+               <property name="text">
+                <string>I forgot my watch</string>
+               </property>
+              </item>
+              <item row="3" column="1">
+               <property name="text">
+                <string>Again?</string>
+               </property>
+              </item>
+              <item row="3" column="2">
+               <property name="text">
+                <string>Vhat is Half-Mile?</string>
+               </property>
+              </item>
+              <item row="3" column="3">
+               <property name="text">
+                <string>X_X</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="editTab">
+         <attribute name="title">
+          <string>Edit</string>
+         </attribute>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>869</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
