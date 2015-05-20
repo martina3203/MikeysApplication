@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <QString>
+#include "Athlete.h"
 
 /*
     Contains the RunningTime class. Purpose of this class is to store time intervals of any kind.

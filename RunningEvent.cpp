@@ -2,34 +2,35 @@
 
 RunningEvent::RunningEvent()
 {
-    eventName = "";
+    EventName = "";
+    theAthlete = Athlete();
 }
 
 RunningEvent::RunningEvent(QString event, QString time)
 {
-    eventName = event;
-    eventTime = convertStringToTime(time);
+    EventName = event;
+    EventTime = convertStringToTime(time);
 }
 
 
 QString RunningEvent::returnEventName()
 {
-    return eventName;
+    return EventName;
 }
 
 RunningTime RunningEvent::returnTime()
 {
-    return eventTime;
+    return EventTime;
 }
 
 void RunningEvent::setName(QString newName)
 {
-    eventName = newName;
+    EventName = newName;
 }
 
 void RunningEvent::setTime(RunningTime newTime)
 {
-    eventTime = newTime;
+    EventTime = newTime;
 }
 
 RunningEvent::~RunningEvent()

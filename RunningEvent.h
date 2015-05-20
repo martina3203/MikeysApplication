@@ -3,6 +3,7 @@
 
 #include <string>
 #include "RunningTime.h"
+#include "Athlete.h"
 
 class RunningEvent
 {
@@ -16,9 +17,11 @@ class RunningEvent
         RunningTime returnTime();
     protected:
     private:
-        QString eventName;
-        RunningTime eventTime;
-
+        QString EventName;
+        int ID;
+        Athlete theAthlete;
+        RunningTime EventTime;
+        //We need to incorporate a date
 };
 
 #endif // RunningEvent_H

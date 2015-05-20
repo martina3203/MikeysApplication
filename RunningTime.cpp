@@ -275,7 +275,7 @@ RunningTime convertStringToTime(QString timeString)
         }
     }
     unsigned int currentPosition = 0;
-    int convertedNumber;
+    unsigned int convertedNumber;
     //Dealing with a time in hours
     if (colonCounter == 2)
     {

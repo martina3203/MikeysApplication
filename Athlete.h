@@ -9,7 +9,6 @@
 
 #include <QString>
 #include <vector>
-#include "RunningEvent.h"
 
 /*
     Contains header for the Athlete class, which contains a name of the Athlete and a list of events they run.
@@ -19,20 +18,17 @@ class Athlete
 {
     public:
         Athlete();
-        Athlete(QString);
+        Athlete(QString,int);
         void test();
         virtual ~Athlete();
         QString returnName();
+        int returnID();
+        void setID(int);
         void setAthleteName(QString);
-        std::vector<RunningEvent> returnRunningEvents();
-        void addToEventList(RunningEvent);
-        bool removeEvent(unsigned int);
-        void printEventList();
-        void clearEventList();
     protected:
     private:
         QString AthleteName;
-        std::vector<RunningEvent> eventList;
+        int ID;
 };
 
 #endif // Athlete_H

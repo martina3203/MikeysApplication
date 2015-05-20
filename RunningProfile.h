@@ -19,7 +19,6 @@ class RunningProfile
         Athlete returnAthleteInformation(QString);
         bool updateAthlete(Athlete);
         void sortListAlphabetically();
-        void quickSort(int,int);
         bool readFromFile(QString);
         bool writeToFile(QString fileName = "");
         void printProfile();

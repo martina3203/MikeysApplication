@@ -10,19 +10,6 @@ void RunningProfile::test()
 {
     setName("Test Profile");
 
-    Athlete Aaron;
-    Aaron.setAthleteName("Aaron Martin");
-    RunningEvent newEvent("400","1:11");
-    Aaron.addToEventList(newEvent);
-    RunningTime newTime;
-    newTime = convertStringToTime("1:21");
-    Athlete Jim;
-    Jim.setAthleteName("Jim");
-    newEvent.setTime(newTime);
-    Jim.addToEventList(newEvent);
-
-    addAthlete(Aaron);
-    addAthlete(Jim);
 }
 
 
