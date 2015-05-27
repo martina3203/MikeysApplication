@@ -2,8 +2,7 @@
 #define RunningProfile_H
 
 #include <QString>
-#include <vector>
-#include <fstream>
+#include <QList>
 #include "Athlete.h"
 
 class RunningProfile
@@ -12,21 +11,20 @@ class RunningProfile
         RunningProfile();
         void test();
         void setName(QString);
+        void setID(int);
         QString returnName();
+        int returnID();
         void addAthlete(Athlete);
         void removeAthlete(QString);
-        std::vector<Athlete> returnAllAthletes();
+        QList<Athlete> returnAllAthletes();
         Athlete returnAthleteInformation(QString);
         bool updateAthlete(Athlete);
-        void sortListAlphabetically();
-        bool readFromFile(QString);
-        bool writeToFile(QString fileName = "");
-        void printProfile();
         virtual ~RunningProfile();
     protected:
     private:
-        QString profileName;
-        std::vector<Athlete> listOfAthletes;
+        int IDNumber;
+        QString ProfileName;
+        QList<Athlete> ListOfAthletes;
 };
 
 #endif // RunningProfile_H

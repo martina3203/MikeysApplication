@@ -65,7 +65,8 @@ RunnerDatabase::RunnerDatabase()
     //Profile Table
     if (!DefaultDatabase.tables().contains(PROFILE_TABLE_NAME))
     {
-        tableCreation = "CREATE TABLE " + PROFILE_TABLE_NAME + " (" + ID_COLUMN + " integer PRIMARY KEY AUTOINCREMENT, " + RUNNER_LIST_COLUMN + " TEXT);";
+        tableCreation = "CREATE TABLE " + PROFILE_TABLE_NAME + " (" + ID_COLUMN + " integer PRIMARY KEY AUTOINCREMENT, "
+                + NAME_COLUMN + " varchar(80), " + RUNNER_LIST_COLUMN + " TEXT);";
         if (!databaseQuery.exec(tableCreation))
         {
             qDebug() << "Failed to Create Profile Table.";
@@ -94,7 +95,18 @@ void RunnerDatabase::test()
     testAthlete.setAthleteName("Aaron Martin");
     result = addAthlete(testAthlete);
     qDebug() << result;
-    //removeAthlete(result);
+    RunningProfile testProfile;
+    testProfile.setName("Hi");
+    testProfile.addAthlete(testAthlete);
+    testProfile.addAthlete(testAthlete);
+    addProfile(testProfile);
+    removeAthlete(result);
+    QList<RunningProfile> testList = returnAllProfiles();
+    for (int i = 0; i < testList.size(); i++)
+    {
+        testProfile = testList.at(i);
+        qDebug() << testProfile.returnName();
+    }
 }
 
 //Adds an athlete to the database
@@ -102,7 +114,8 @@ int RunnerDatabase::addAthlete(Athlete &newAthlete)
 {
     QSqlQuery databaseQuery;
     int IDNumber = 0;
-    QString command = "INSERT INTO " + RUNNER_TABLE_NAME + " (" + NAME_COLUMN + ") VALUES ('" + newAthlete.returnName() + "');";
+    QString athleteName = newAthlete.returnName();
+    QString command = "INSERT INTO " + RUNNER_TABLE_NAME + " (" + NAME_COLUMN + ") VALUES ('" + athleteName + "');";
     if (!databaseQuery.exec(command))
     {
         qDebug() << "Failed to add Athlete " << newAthlete.returnName() << ".";
@@ -129,17 +142,69 @@ bool RunnerDatabase::removeAthlete(int IDNumber)
     return true;
 }
 
+//Adds a profile to the database
 int RunnerDatabase::addProfile(RunningProfile &newProfile)
 {
     QSqlQuery databaseQuery;
     QString command;
+    //First we must acquire all of the ID's of athletes that correspond to the newProfile
+    //This is stored as a string in the database of comma seperated numbers
+    QList<Athlete> athleteList = newProfile.returnAllAthletes();
+    QString profileName = newProfile.returnName();
+    QString IDList = "";
+    int IDNumber = 0;
+    for (int i = 0; i < athleteList.size(); i++)
+    {
+        //Grab every ID
+        QString convertedNumber = "";
+        Athlete currentAthlete = athleteList.at(i);
+        int currentAthleteID = currentAthlete.returnID();
+        convertedNumber = QString::number(currentAthleteID);
+        IDList = IDList + convertedNumber + ",";
+    }
+    command = "INSERT INTO " + PROFILE_TABLE_NAME + " (" + NAME_COLUMN + ", " + RUNNER_LIST_COLUMN + ") VALUES ('"
+            + profileName + "', '" + IDList + "');";
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failed to add Profile to Database.";
+    }
+    else
+    {
+        IDNumber = databaseQuery.lastInsertId().toInt();
+        newProfile.setID(IDNumber);
+    }
+    return IDNumber;
 }
 
+//Returns all profiles from the database
 QList<RunningProfile> RunnerDatabase::returnAllProfiles()
 {
     QList<RunningProfile> profileList;
     QSqlQuery databaseQuery;
     QString command;
+    //Grab all of the profiles from the database.
+    command = "SELECT * FROM " + PROFILE_TABLE_NAME + ";";
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failed to return all Profiles from Database.";
+    }
+    else
+    {
+        while(databaseQuery.next())
+        {
+            //Add each profile to the list
+            RunningProfile returnedProfile;
+            //Grab ID
+            int IDNumber = databaseQuery.value(0).toInt();
+            returnedProfile.setID(IDNumber);
+            //Grab Name
+            QString profileName = databaseQuery.value(1).toString();
+            returnedProfile.setName(profileName);
+            //Now we must collect all of the athletes that correspond to the Profile
+            QString athleteList = databaseQuery.value(2).toString();
+            profileList.append(returnedProfile);
+        }
+    }
     return profileList;
 }
 

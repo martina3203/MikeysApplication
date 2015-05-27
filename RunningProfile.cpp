@@ -3,7 +3,8 @@
 RunningProfile::RunningProfile()
 {
     //Constructor
-    profileName = "";
+    ProfileName = "";
+    IDNumber = 0;
 }
 
 void RunningProfile::test()
@@ -15,34 +16,43 @@ void RunningProfile::test()
 
 void RunningProfile::setName(QString newName)
 {
-    profileName = newName;
+   ProfileName = newName;
+}
+
+void RunningProfile::setID(int newID)
+{
+    IDNumber = newID;
 }
 
 QString RunningProfile::returnName()
 {
-    return profileName;
+    return ProfileName;
+}
+
+int RunningProfile::returnID()
+{
+    return IDNumber;
 }
 
 void RunningProfile::addAthlete(Athlete newAthlete)
 {
-    listOfAthletes.push_back(newAthlete);
+    ListOfAthletes.push_back(newAthlete);
 }
 
 void RunningProfile::removeAthlete(QString AthleteName)
 {
     //Find Athlete
-    for (unsigned int i = 0; i < listOfAthletes.size(); i++)
+    for (int i = 0; i < ListOfAthletes.size(); i++)
     {
         //Remove Athlete
-        Athlete currentAthlete = listOfAthletes.at(i);
+        Athlete currentAthlete = ListOfAthletes.at(i);
         if (AthleteName == currentAthlete.returnName())
         {
             //Once removed, update list
-            for (unsigned int j = i; j < listOfAthletes.size(); j++)
+            for (int j = i; j < ListOfAthletes.size(); j++)
             {
-                listOfAthletes.at(j) = listOfAthletes.at(j+1);
+                ListOfAthletes.replace(j,ListOfAthletes.at(j+1));
             }
-            listOfAthletes.pop_back();
             return;
         }
     }
@@ -51,9 +61,9 @@ void RunningProfile::removeAthlete(QString AthleteName)
 Athlete RunningProfile::returnAthleteInformation(QString AthleteName)
 {
     Athlete currentAthlete;
-    for (unsigned int i = 0; i < listOfAthletes.size(); i++)
+    for (int i = 0; i < ListOfAthletes.size(); i++)
     {
-        currentAthlete = listOfAthletes.at(i);
+        currentAthlete = ListOfAthletes.at(i);
         if (AthleteName == currentAthlete.returnName())
         {
             return currentAthlete;
@@ -64,19 +74,19 @@ Athlete RunningProfile::returnAthleteInformation(QString AthleteName)
     return currentAthlete;
 }
 
-std::vector<Athlete> RunningProfile::returnAllAthletes()
+QList<Athlete> RunningProfile::returnAllAthletes()
 {
-    return listOfAthletes;
+    return ListOfAthletes;
 }
 
 bool RunningProfile::updateAthlete(Athlete updatedAthlete)
 {
-    for (unsigned int i = 0; i < listOfAthletes.size(); i++)
+    for (int i = 0; i < ListOfAthletes.size(); i++)
     {
-        Athlete currentAthlete = listOfAthletes.at(i);
+        Athlete currentAthlete = ListOfAthletes.at(i);
         if (updatedAthlete.returnName() == currentAthlete.returnName())
         {
-            listOfAthletes.at(i) = updatedAthlete;
+            ListOfAthletes.replace(i,updatedAthlete);
             return true;
         }
     }
