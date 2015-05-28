@@ -39,6 +39,11 @@ void RunningProfile::addAthlete(Athlete newAthlete)
     ListOfAthletes.push_back(newAthlete);
 }
 
+void RunningProfile::updateAthleteList(QList<Athlete> newList)
+{
+    ListOfAthletes = newList;
+}
+
 void RunningProfile::removeAthlete(QString AthleteName)
 {
     //Find Athlete

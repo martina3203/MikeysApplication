@@ -20,6 +20,7 @@ public:
     //Methods related to the Athlete Table
     int addAthlete(Athlete&);
     bool removeAthlete(int);
+    QList<Athlete> findAthletes(QString);
 
     //Methods related to the Profile Table
     int addProfile(RunningProfile&);
@@ -33,6 +34,9 @@ public:
     QList<RunningEvent> findEventsForDate(int,QString);
     bool removeEvent(int);
 
+    //Utility functions
+    static QString convertAthleteListToString(QList<Athlete>);
+
     //These are the default strings used for tables
     static const QString RUNNER_TABLE_NAME;
     static const QString EVENT_TABLE_NAME;
@@ -44,7 +48,7 @@ public:
     static const QString RUNNER_COLUMN;
     static const QString EVENT_TIME_COLUMN;
     static const QString EVENT_DATE_COLUMN;
-    static const QString RUNNER_LIST_COLUMN;
+    static const QString ATHLETE_LIST_COLUMN;
 private:
     QSqlDatabase DefaultDatabase;
 };

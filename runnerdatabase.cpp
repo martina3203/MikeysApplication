@@ -13,7 +13,7 @@ const QString RunnerDatabase::NAME_COLUMN = "NAME";
 const QString RunnerDatabase::RUNNER_COLUMN = "RUNNER_ID";
 const QString RunnerDatabase::EVENT_TIME_COLUMN = "EVENT_TIME";
 const QString RunnerDatabase::EVENT_DATE_COLUMN = "EVENT_DATE";
-const QString RunnerDatabase::RUNNER_LIST_COLUMN = "RUNNER_LIST";
+const QString RunnerDatabase::ATHLETE_LIST_COLUMN = "RUNNER_LIST";
 
 
 RunnerDatabase::RunnerDatabase()
@@ -66,7 +66,7 @@ RunnerDatabase::RunnerDatabase()
     if (!DefaultDatabase.tables().contains(PROFILE_TABLE_NAME))
     {
         tableCreation = "CREATE TABLE " + PROFILE_TABLE_NAME + " (" + ID_COLUMN + " integer PRIMARY KEY AUTOINCREMENT, "
-                + NAME_COLUMN + " varchar(80), " + RUNNER_LIST_COLUMN + " TEXT);";
+                + NAME_COLUMN + " varchar(80), " + ATHLETE_LIST_COLUMN + " TEXT);";
         if (!databaseQuery.exec(tableCreation))
         {
             qDebug() << "Failed to Create Profile Table.";
@@ -142,6 +142,45 @@ bool RunnerDatabase::removeAthlete(int IDNumber)
     return true;
 }
 
+//Parse a comma separated string to find corresponding Athletes by ID
+QList<Athlete> RunnerDatabase::findAthletes(QString IDList)
+{
+    QSqlQuery databaseQuery;
+    QString command = "";
+    QList<Athlete> athleteList;
+    QString buildString = "";
+    for (int i = 0; i < IDList.size(); i++)
+    {
+        //Parse string
+        QString buildString;
+        if (IDList.at(i) != ',')
+        {
+            buildString = buildString + IDList.at(i);
+        }
+        else if (buildString != "")
+        {
+            //Try to find this value in the database
+            command = "SELECT * FROM " + RUNNER_TABLE_NAME + " WHERE "
+                    + ID_COLUMN + " = " + buildString + ";";
+            if (databaseQuery.exec(command))
+            {
+                //If found, add to list
+                databaseQuery.next();
+                QString athleteName = databaseQuery.value(1).toString();
+                int athleteID = databaseQuery.value(0).toInt();
+                Athlete newAthlete;
+                newAthlete.setAthleteName(athleteName);
+                newAthlete.setID(athleteID);
+                //Add to list
+                athleteList.append(newAthlete);
+            }
+            //Reset string
+            buildString = "";
+        }
+    }
+    return athleteList;
+}
+
 //Adds a profile to the database
 int RunnerDatabase::addProfile(RunningProfile &newProfile)
 {
@@ -151,18 +190,9 @@ int RunnerDatabase::addProfile(RunningProfile &newProfile)
     //This is stored as a string in the database of comma seperated numbers
     QList<Athlete> athleteList = newProfile.returnAllAthletes();
     QString profileName = newProfile.returnName();
-    QString IDList = "";
+    QString IDList = convertAthleteListToString(newProfile.returnAllAthletes());
     int IDNumber = 0;
-    for (int i = 0; i < athleteList.size(); i++)
-    {
-        //Grab every ID
-        QString convertedNumber = "";
-        Athlete currentAthlete = athleteList.at(i);
-        int currentAthleteID = currentAthlete.returnID();
-        convertedNumber = QString::number(currentAthleteID);
-        IDList = IDList + convertedNumber + ",";
-    }
-    command = "INSERT INTO " + PROFILE_TABLE_NAME + " (" + NAME_COLUMN + ", " + RUNNER_LIST_COLUMN + ") VALUES ('"
+    command = "INSERT INTO " + PROFILE_TABLE_NAME + " (" + NAME_COLUMN + ", " + ATHLETE_LIST_COLUMN + ") VALUES ('"
             + profileName + "', '" + IDList + "');";
     if (!databaseQuery.exec(command))
     {
@@ -202,16 +232,31 @@ QList<RunningProfile> RunnerDatabase::returnAllProfiles()
             returnedProfile.setName(profileName);
             //Now we must collect all of the athletes that correspond to the Profile
             QString athleteList = databaseQuery.value(2).toString();
+            QList<Athlete> convertedList = findAthletes(athleteList);
+            returnedProfile.updateAthleteList(convertedList);
             profileList.append(returnedProfile);
         }
     }
     return profileList;
 }
 
+//Updates a specific profile in the database
 bool RunnerDatabase::updateProfile(RunningProfile theProfile)
 {
     QSqlQuery databaseQuery;
     QString command;
+    //Acquire attributes
+    QString profileName = theProfile.returnName();
+    int IDNumber = theProfile.returnID();
+    QString athleteList = convertAthleteListToString(theProfile.returnAllAthletes());
+    //Build SQL Command
+    command = "UPDATE " + PROFILE_TABLE_NAME + " SET " + NAME_COLUMN + " = '" + profileName + "', " +
+            ATHLETE_LIST_COLUMN + " = '" +  athleteList + "' WHERE " + ID_COLUMN + " = " + IDNumber + ";";
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failed to update Profile '" + profileName + "' in Database.";
+        return false;
+    }
     return true;
 }
 
@@ -219,6 +264,10 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
 {
     QSqlQuery databaseQuery;
     QString command;
+    int IDNumber = 0;
+    QString eventName = newEvent.returnEventName();
+    QString eventTime = newEvent.returnTime();
+    return IDNumber;
 }
 
 bool RunnerDatabase::updateEvent(RunningEvent theEvent)
@@ -241,4 +290,21 @@ bool RunnerDatabase::removeEvent(int IDNumber)
     QSqlQuery databaseQuery;
     QString command;
     return true;
+}
+
+// UTILITY FUNCTIONS FROM THIS POINT ON
+
+QString RunnerDatabase::convertAthleteListToString(QList<Athlete> theList)
+{
+    QString IDList = "";
+    for (int i = 0; i < theList.size(); i++)
+    {
+        //Grab every ID
+        QString convertedNumber = "";
+        Athlete currentAthlete = theList.at(i);
+        int currentAthleteID = currentAthlete.returnID();
+        convertedNumber = QString::number(currentAthleteID);
+        IDList = IDList + convertedNumber + ",";
+    }
+    return IDList;
 }

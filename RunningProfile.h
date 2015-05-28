@@ -15,6 +15,7 @@ class RunningProfile
         QString returnName();
         int returnID();
         void addAthlete(Athlete);
+        void updateAthleteList(QList<Athlete>);
         void removeAthlete(QString);
         QList<Athlete> returnAllAthletes();
         Athlete returnAthleteInformation(QString);
