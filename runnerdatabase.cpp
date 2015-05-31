@@ -92,21 +92,32 @@ void RunnerDatabase::test()
 {
     Athlete testAthlete;
     int result;
+    //Adding of Athletes
+    qDebug() << "Start Athlete Testing:";
     testAthlete.setAthleteName("Aaron Martin");
     result = addAthlete(testAthlete);
     qDebug() << result;
+
+    //Adding of Profiles
+    qDebug() << "Start Profile Testing:";
     RunningProfile testProfile;
-    testProfile.setName("Hi");
-    testProfile.addAthlete(testAthlete);
-    testProfile.addAthlete(testAthlete);
+    testProfile.setName("Test Profile");
     addProfile(testProfile);
-    removeAthlete(result);
+    //Query of All Profiles
     QList<RunningProfile> testList = returnAllProfiles();
     for (int i = 0; i < testList.size(); i++)
     {
         testProfile = testList.at(i);
         qDebug() << testProfile.returnName();
     }
+
+    //Adding of events
+    qDebug() << "Start Event Testing:";
+    RunningEvent testEvent;
+    RunningTime newTime = convertStringToTime("4:46.3");
+    testEvent.setTime(newTime);
+    result = addEvent(testEvent);
+    qDebug() << result;
 }
 
 //Adds an athlete to the database
@@ -266,7 +277,9 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     QString command;
     int IDNumber = 0;
     QString eventName = newEvent.returnEventName();
-    QString eventTime = newEvent.returnTime();
+    QString eventTime = newEvent.returnTime().toString();
+    qDebug() << eventTime;
+
     return IDNumber;
 }
 

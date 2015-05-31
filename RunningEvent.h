@@ -13,8 +13,10 @@ class RunningEvent
         virtual ~RunningEvent();
         void setName(QString);
         void setTime(RunningTime);
+        void setID(int);
         QString returnEventName();
         RunningTime returnTime();
+        int returnID();
     protected:
     private:
         QString EventName;

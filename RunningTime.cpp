@@ -7,10 +7,10 @@
 RunningTime::RunningTime()
 {
     //Constructor
-    miliseconds = 0;
-    seconds = 0;
-    minutes = 0;
-    hours = 0;
+    Miliseconds = 0;
+    Seconds = 0;
+    Minutes = 0;
+    Hours = 0;
 }
 
 RunningTime::~RunningTime()
@@ -35,7 +35,7 @@ int RunningTime::testFunction()
 
     //Testing optional Milisecond component
     testTime.setMiliseconds(0);
-    std::cout << "Testing optional Miliseconds segment: " << testTime << std::endl;
+    std::cout << "Testing optional MiliSeconds segment: " << testTime << std::endl;
 
     //Test Function Overloading
     RunningTime test1;
@@ -93,10 +93,10 @@ void RunningTime::setMiliseconds(int newMili)
     int currentMSeconds = newMili;
     while (currentMSeconds >= 100)
     {
-        seconds++;
+        Seconds++;
         currentMSeconds = currentMSeconds - 100;
     }
-    miliseconds = currentMSeconds;
+    Miliseconds = currentMSeconds;
 }
 
 void RunningTime::setSeconds(int newSeconds)
@@ -105,11 +105,11 @@ void RunningTime::setSeconds(int newSeconds)
     int currentSeconds = newSeconds;
     while (currentSeconds >= 60)
     {
-        //increment minutes, subtract 60 to continue to a readable format
-        minutes++;
+        //increment Minutes, subtract 60 to continue to a readable format
+        Minutes++;
         currentSeconds = currentSeconds - 60;
     }
-    seconds = currentSeconds;
+    Seconds = currentSeconds;
 }
 
 void RunningTime::setMinutes(int newMinutes)
@@ -118,36 +118,84 @@ void RunningTime::setMinutes(int newMinutes)
     int currentMinutes = newMinutes;
     while (currentMinutes >= 60)
     {
-        //increment hours, subtract 60 to continue to a readable format
-        hours++;
+        //increment Hours, subtract 60 to continue to a readable format
+        Hours++;
         currentMinutes = currentMinutes - 60;
     }
-    minutes = currentMinutes;
+    Minutes = currentMinutes;
+}
+
+QString RunningTime::toString()
+{
+    QString returnString = "";
+    QString hoursString = QString::number(Hours);
+    QString minutesString = QString::number(Minutes);
+    QString secondsString = QString::number(Seconds);
+    QString milisecondsString = QString::number(Miliseconds);
+    //Build strings
+    //Omit certain fields if empty.
+    if (Hours != 0)
+    {
+        if (Hours < 10)
+        {
+            returnString = "0";
+        }
+        returnString = hoursString + ":";
+    }
+    //Only omit if there if minutes is 0 and hours is 0
+    if ((Minutes != 0) || (Hours != 0))
+    {
+        if (Minutes < 10)
+        {
+            returnString = returnString + "0";
+        }
+        returnString = returnString + minutesString + ":";
+    }
+    //Seconds field will always be included
+    if (Seconds < 10)
+    {
+        returnString = returnString + "0";
+    }
+    returnString = returnString + secondsString;
+    //Omit if zero
+    if (Miliseconds != 0)
+    {
+        returnString = returnString + ".";
+        if (Miliseconds < 10)
+        {
+            returnString = returnString + "0" + milisecondsString;
+        }
+        else
+        {
+            returnString = returnString + milisecondsString;
+        }
+    }
+    return returnString;
 }
 
 void RunningTime::setHours(int newHours)
 {
-    hours = newHours;
+    Hours = newHours;
 }
 
 int RunningTime::returnMiliseconds()
 {
-    return miliseconds;
+    return Miliseconds;
 }
 
 int RunningTime::returnSeconds()
 {
-    return seconds;
+    return Seconds;
 }
 
 int RunningTime::returnMinutes()
 {
-    return minutes;
+    return Minutes;
 }
 
 int RunningTime::returnHours()
 {
-    return hours;
+    return Hours;
 }
 
 bool RunningTime::operator == (RunningTime anotheRunningTime)
@@ -242,7 +290,7 @@ std::ostream& operator << (std::ostream& Output,RunningTime theTime)
     Output.fill('0');
     //Seconds component
     Output << theTime.returnSeconds();
-    //Miliseconds portion, which is also optional
+    //MiliSeconds portion, which is also optional
     if (theTime.returnMiliseconds() != 0)
     {
         Output << ".";
@@ -263,6 +311,7 @@ RunningTime convertStringToTime(QString timeString)
     QString timeSegment;
     int colonCounter = 0;
     bool periodFound = false;
+    //First we parse to see how many colons and periods there are
     for (int i = 0; i < timeString.size(); i++)
     {
         if (timeString.at(i) == ':')
@@ -274,9 +323,9 @@ RunningTime convertStringToTime(QString timeString)
             periodFound = true;
         }
     }
-    unsigned int currentPosition = 0;
-    unsigned int convertedNumber;
-    //Dealing with a time in hours
+    int currentPosition = 0;
+    int convertedNumber;
+    //Dealing with a time in Hours
     if (colonCounter == 2)
     {
         timeSegment = "";
@@ -289,14 +338,12 @@ RunningTime convertStringToTime(QString timeString)
         convertedNumber = timeSegment.toInt();
         convertedTime.setHours(convertedNumber);
         convertedNumber = 0;
+        //Move to next position
+        currentPosition++;
     }
     //Now the Minutes position
     if (colonCounter >= 1)
     {
-        if (currentPosition != 0)
-        {
-            currentPosition++;
-        }
         timeSegment = "";
         while (timeString.at(currentPosition) != ':')
         {
@@ -306,33 +353,31 @@ RunningTime convertStringToTime(QString timeString)
         convertedNumber = timeSegment.toInt();
         convertedTime.setMinutes(convertedNumber);
         convertedNumber = 0;
+        //Move to next position
+        currentPosition++;
     }
     if (colonCounter >= 0)
     {
-        if (currentPosition != 0)
-        {
-            currentPosition++;
-        }
         timeSegment = "";
         while ((timeString.at(currentPosition) != '.') && (currentPosition < (timeString.size()-1)))
         {
             timeSegment = timeSegment + timeString.at(currentPosition);
             currentPosition++;
         }
-        timeSegment = timeSegment + timeString.at(currentPosition);
         convertedNumber = timeSegment.toInt();
         convertedTime.setSeconds(convertedNumber);
         convertedNumber = 0;
+        //Move to next position, if one should exist
+        currentPosition++;
     }
     //We may have a significant milisecond value
     if (periodFound == true)
     {
         timeSegment = "";
-        for (unsigned int i = (currentPosition+1); i < timeString.size(); i++)
+        for (int i = currentPosition; i < timeString.size(); i++)
         {
             timeSegment = timeSegment + timeString.at(i);
         }
-        timeSegment = timeSegment + timeString.at(currentPosition);
         convertedNumber = timeSegment.toInt();
         convertedTime.setMiliseconds(convertedNumber);
     }

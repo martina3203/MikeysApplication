@@ -21,6 +21,7 @@ class RunningTime
         void setSeconds(int);
         void setMinutes(int);
         void setHours(int);
+        QString toString();
         int returnMiliseconds();
         int returnSeconds();
         int returnMinutes();
@@ -31,10 +32,10 @@ class RunningTime
         bool operator >(RunningTime);
     protected:
     private:
-        int miliseconds;
-        int seconds;
-        int minutes;
-        int hours;
+        int Miliseconds;
+        int Seconds;
+        int Minutes;
+        int Hours;
 };
 
 //Ostream for Time

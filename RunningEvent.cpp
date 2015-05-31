@@ -23,6 +23,11 @@ RunningTime RunningEvent::returnTime()
     return EventTime;
 }
 
+int RunningEvent::returnID()
+{
+    return ID;
+}
+
 void RunningEvent::setName(QString newName)
 {
     EventName = newName;
@@ -31,6 +36,11 @@ void RunningEvent::setName(QString newName)
 void RunningEvent::setTime(RunningTime newTime)
 {
     EventTime = newTime;
+}
+
+void RunningEvent::setID(int newID)
+{
+    ID = newID;
 }
 
 RunningEvent::~RunningEvent()
