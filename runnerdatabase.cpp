@@ -278,8 +278,22 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     int IDNumber = 0;
     QString eventName = newEvent.returnEventName();
     QString eventTime = newEvent.returnTime().toString();
-    qDebug() << eventTime;
-
+    QString eventDate = newEvent.returnDate().toString("MM.DD.YYYY");
+    int athleteID = newEvent.returnAthleteID();
+    //Now we create our insert statement
+    command = "INSERT INTO " + EVENT_TABLE_NAME + " (" + NAME_COLUMN + ", " + EVENT_DATE_COLUMN + ", " +
+            EVENT_TIME_COLUMN + ", " + RUNNER_COLUMN + ") VALUES ('" + eventName + "', '" + eventDate +
+            "', '" + eventTime + "', " + athleteID + ");";
+    //Execute
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failure to add Event '" + eventName + "' to Database.";
+    }
+    else
+    {
+        IDNumber = databaseQuery.lastInsertId();
+        newEvent.setID(IDNumber);
+    }
     return IDNumber;
 }
 
@@ -287,14 +301,42 @@ bool RunnerDatabase::updateEvent(RunningEvent theEvent)
 {
     QSqlQuery databaseQuery;
     QString command;
+    int eventID = theEvent.returnID();
+    QString eventName = theEvent.returnEventName();
+    QString eventTime = theEvent.returnTime().toString();
+    QString eventDate = theEvent.returnDate().toString("MM.DD.YYYY");
+    int athleteID = theEvent.returnAthleteID();
+    command = "UPDATE " + EVENT_TABLE_NAME + " SET " + NAME_COLUMN + " ='" + eventName + "', " +
+            EVENT_TIME_COLUMN + "='" + eventTime + "', " + EVENT_DATE_COLUMN + " ='" + eventDate +
+            "'," + RUNNER_COLUMN + "=" + athleteID + " WHERE " + ID_COLUMN + "=" + eventID;
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failed to update Event " + eventName + "in Database.";
+        return false;
+    }
     return true;
 }
 
-QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QString theDate)
+QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDate)
 {
     QList<RunningEvent> eventList;
     QSqlQuery databaseQuery;
-    QString command;
+    //Convert QDate to string
+    QString dateString = theDate.toString("MM.DD.YYYY");
+    QString command = "SELECT * FROM " + EVENT_TABLE_NAME + " WHERE " + RUNNER_COLUMN + " = " + athleteID + " AND "
+            + EVENT_DATE_COLUMN + " = '" + dateString + "';";
+    databaseQuery.exec(command);
+    while (!databaseQuery.next())
+    {
+        //Create and retrieve each field of the event
+        RunningEvent newEvent;
+        int ID = databaseQuery.value(0).toInt();
+        QString eventName = databaseQuery.value(1).toString();
+        QString eventTime = databaseQuery.value(2).toString();
+        QString eventDate = databaseQuery.value(3).toString();
+
+
+    }
     return eventList;
 }
 

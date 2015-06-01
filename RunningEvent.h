@@ -1,9 +1,11 @@
 #ifndef RunningEvent_H
 #define RunningEvent_H
 
-#include <string>
+#include <QString>
+#include <QDate>
 #include "RunningTime.h"
 #include "Athlete.h"
+
 
 class RunningEvent
 {
@@ -14,16 +16,20 @@ class RunningEvent
         void setName(QString);
         void setTime(RunningTime);
         void setID(int);
+        void setAthleteID(int);
+        void setDate(QDate);
         QString returnEventName();
         RunningTime returnTime();
         int returnID();
+        int returnAthleteID();
+        QDate returnDate();
     protected:
     private:
         QString EventName;
         int ID;
-        Athlete theAthlete;
+        int AthleteID;
         RunningTime EventTime;
-        //We need to incorporate a date
+        QDate EventDate;
 };
 
 #endif // RunningEvent_H
