@@ -31,7 +31,7 @@ public:
     //Methods related to the Event Table
     int addEvent(RunningEvent&);
     bool updateEvent(RunningEvent);
-    QList<RunningEvent> findEventsForDate(int,QString);
+    QList<RunningEvent> findEventsForDate(int,QDate);
     bool removeEvent(int);
 
     //Utility functions

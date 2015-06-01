@@ -52,7 +52,7 @@ RunnerDatabase::RunnerDatabase()
     if (!DefaultDatabase.tables().contains(EVENT_TABLE_NAME))
     {
         tableCreation = "CREATE TABLE " + EVENT_TABLE_NAME + " (" + ID_COLUMN + " integer PRIMARY KEY AUTOINCREMENT, " + NAME_COLUMN + " varchar(80), "
-                + RUNNER_COLUMN + " integer, " + EVENT_DATE_COLUMN + " varchar(25));";
+                + RUNNER_COLUMN + " integer, " + EVENT_TIME_COLUMN + " varchar(30), " + EVENT_DATE_COLUMN + " varchar(25));";
         if (!databaseQuery.exec(tableCreation))
         {
             qDebug() << "Failed to Create Event Table.";
@@ -90,14 +90,61 @@ RunnerDatabase::~RunnerDatabase()
 
 void RunnerDatabase::test()
 {
+    /*
+     * ATHLETES DATABASE SECTION
+     */
     Athlete testAthlete;
     int result;
     //Adding of Athletes
     qDebug() << "Start Athlete Testing:";
     testAthlete.setAthleteName("Aaron Martin");
     result = addAthlete(testAthlete);
-    qDebug() << result;
+    if (result != 0)
+    {
+        qDebug() << "Athlete successfully added.";
+    }
+    else
+    {
+        qDebug() << "Athlete failed to be added.";
+    }
 
+    //Finding Athletes based on a comma separated list
+    QString IDList = QString::number(result) + ",";
+    Athlete newAthlete;
+    newAthlete.setAthleteName("Mike Cox");
+    result = addAthlete(newAthlete);
+    IDList = IDList + QString::number(result) + ",";
+    QList<Athlete> testAthleteList = findAthletes(IDList);
+    for (int i = 0; i < testAthleteList.size(); i++)
+    {
+        Athlete currentAthlete = testAthleteList.at(i);
+        QString name = currentAthlete.returnName();
+        int ID = currentAthlete.returnID();
+        QString IDConverted = QString::number(ID);
+        qDebug() << "Athlete Name: "  + name + " || Athlete ID: " + IDConverted;
+    }
+    if (testAthleteList.size() == 0)
+    {
+        qDebug() << "No Athletes in List. Error in Database.";
+        return;
+    }
+
+    //Removing the new athletes
+    result = removeAthlete(testAthlete.returnID());
+    if (result != 1)
+    {
+        qDebug() << "Failed to remove Athletes from Database.";
+        return;
+    }
+    result = removeAthlete(newAthlete.returnID());
+    if (result != 1)
+    {
+        qDebug() << "Failed to remove Athletes from Database.";
+        return;
+    }
+    qDebug() << "Test Athletes removed.";
+
+    /*
     //Adding of Profiles
     qDebug() << "Start Profile Testing:";
     RunningProfile testProfile;
@@ -118,6 +165,8 @@ void RunnerDatabase::test()
     testEvent.setTime(newTime);
     result = addEvent(testEvent);
     qDebug() << result;
+    findEventsForDate(result)
+    */
 }
 
 //Adds an athlete to the database
@@ -163,7 +212,6 @@ QList<Athlete> RunnerDatabase::findAthletes(QString IDList)
     for (int i = 0; i < IDList.size(); i++)
     {
         //Parse string
-        QString buildString;
         if (IDList.at(i) != ',')
         {
             buildString = buildString + IDList.at(i);
@@ -184,6 +232,10 @@ QList<Athlete> RunnerDatabase::findAthletes(QString IDList)
                 newAthlete.setID(athleteID);
                 //Add to list
                 athleteList.append(newAthlete);
+            }
+            else
+            {
+                qDebug() << "Unable to find value in Database: " + buildString;
             }
             //Reset string
             buildString = "";
@@ -291,7 +343,7 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     }
     else
     {
-        IDNumber = databaseQuery.lastInsertId();
+        IDNumber = databaseQuery.lastInsertId().toInt();
         newEvent.setID(IDNumber);
     }
     return IDNumber;
@@ -329,13 +381,31 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
     while (!databaseQuery.next())
     {
         //Create and retrieve each field of the event
+        //Convert values as necessary
         RunningEvent newEvent;
         int ID = databaseQuery.value(0).toInt();
-        QString eventName = databaseQuery.value(1).toString();
-        QString eventTime = databaseQuery.value(2).toString();
-        QString eventDate = databaseQuery.value(3).toString();
+        int athleteID = databaseQuery.value(1).toInt();
+        QString eventName = databaseQuery.value(2).toString();
 
+        //Acquire and convert time
+        QString eventTimeString = databaseQuery.value(3).toString();
+        RunningTime eventTime = convertStringToTime(eventTimeString);
 
+        //Acquire and convert date
+        //Date is in the format of 'MM.DD.YYYY'
+        QString eventDateString = databaseQuery.value(4).toString();
+        QDate eventDate;
+        //Acquire each field individually and convert to integer value
+        QString dateSubstring = eventDateString.section(".",0,0);
+        qDebug() << dateSubstring;
+        //Set values
+        newEvent.setID(ID);
+        newEvent.setAthleteID(athleteID);
+        newEvent.setName(eventName);
+        newEvent.setTime(eventTime);
+        newEvent.setDate(eventDate);
+        //Add to list
+        eventList.push_back(newEvent);
     }
     return eventList;
 }
@@ -343,7 +413,12 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
 bool RunnerDatabase::removeEvent(int IDNumber)
 {
     QSqlQuery databaseQuery;
-    QString command;
+    QString command = "DELETE FROM " + EVENT_TABLE_NAME + " WHERE " + ID_COLUMN + " = " + QString::number(IDNumber) + ";";
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failed to remove Athlete from Database.";
+        return false;
+    }
     return true;
 }
 
