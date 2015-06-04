@@ -238,6 +238,15 @@ void RunnerDatabase::test()
         qDebug() << "Event list is empty. Error in Database.";
     }
 
+    qDebug() << "Deleting an event from the database";
+    if (removeEvent(testEvent.returnID()))
+    {
+        qDebug() << "Event successfully deleted.";
+    }
+    else
+    {
+        qDebug() << "Failed to delete event.";
+    }
 }
 
 //Adds an athlete to the database
