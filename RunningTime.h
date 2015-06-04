@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <QString>
+#include <QDebug>
 #include "Athlete.h"
 
 /*

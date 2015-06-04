@@ -211,7 +211,7 @@ void RunnerDatabase::test()
     }
 
     qDebug() << "Update Event.";
-    newTime = convertStringToTime("5:05:10.0");
+    newTime = convertStringToTime("2:50:00.60");
     testEvent.setTime(newTime);
     result = updateEvent(testEvent);
     if (result == 1)
