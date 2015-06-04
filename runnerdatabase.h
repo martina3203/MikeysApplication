@@ -26,7 +26,7 @@ public:
     int addProfile(RunningProfile&);
     QList<RunningProfile> returnAllProfiles();
     bool updateProfile(RunningProfile);
-    bool removeProfile(RunningProfile);
+    bool removeProfile(int);
 
     //Methods related to the Event Table
     int addEvent(RunningEvent&);
@@ -49,6 +49,8 @@ public:
     static const QString EVENT_TIME_COLUMN;
     static const QString EVENT_DATE_COLUMN;
     static const QString ATHLETE_LIST_COLUMN;
+    //This is a hard coded value of what format the date will be turned into a string
+    static const QString DATE_FORMAT;
 private:
     QSqlDatabase DefaultDatabase;
 };

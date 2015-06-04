@@ -4,6 +4,7 @@ RunningEvent::RunningEvent()
 {
     EventName = "";
     AthleteID = 0;
+    ID = 0;
 }
 
 RunningEvent::RunningEvent(QString event, QString time)

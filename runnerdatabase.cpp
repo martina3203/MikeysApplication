@@ -16,6 +16,9 @@ const QString RunnerDatabase::EVENT_DATE_COLUMN = "EVENT_DATE";
 const QString RunnerDatabase::ATHLETE_LIST_COLUMN = "RUNNER_LIST";
 
 
+//These are just normal constants
+const QString RunnerDatabase::DATE_FORMAT = "MM.dd.yyyy";
+
 RunnerDatabase::RunnerDatabase()
 {
     //Create Database connection using a default connection
@@ -48,7 +51,7 @@ RunnerDatabase::RunnerDatabase()
             qDebug() << "Runner Table Created.";
         }
     }
-    //Runner Event Table
+    //Event Table
     if (!DefaultDatabase.tables().contains(EVENT_TABLE_NAME))
     {
         tableCreation = "CREATE TABLE " + EVENT_TABLE_NAME + " (" + ID_COLUMN + " integer PRIMARY KEY AUTOINCREMENT, " + NAME_COLUMN + " varchar(80), "
@@ -106,6 +109,7 @@ void RunnerDatabase::test()
     else
     {
         qDebug() << "Athlete failed to be added.";
+        return;
     }
 
     //Finding Athletes based on a comma separated list
@@ -144,7 +148,7 @@ void RunnerDatabase::test()
     }
     qDebug() << "Test Athletes removed.";
 
-    /*
+
     //Adding of Profiles
     qDebug() << "Start Profile Testing:";
     RunningProfile testProfile;
@@ -158,15 +162,82 @@ void RunnerDatabase::test()
         qDebug() << testProfile.returnName();
     }
 
+    //Update Profile
+    qDebug() << "Testing Updating by changing profile name";
+    testProfile.setName("Not Test Profile");
+    updateProfile(testProfile);
+    testList = returnAllProfiles();
+    for (int i = 0; i < testList.size(); i++)
+    {
+        testProfile = testList.at(i);
+        qDebug() << testProfile.returnName();
+    }
+
+    //Finally, remove profile
+    qDebug() << "Removing test profile.";
+    if (!removeProfile(testProfile.returnID()))
+    {
+        qDebug() << "Unable to remove test profile.";
+        return;
+    }
+    else
+    {
+        qDebug() << "Test Profile successfully removed.";
+    }
+
     //Adding of events
     qDebug() << "Start Event Testing:";
     RunningEvent testEvent;
+    QDate testDate;
+    testDate.setDate(1993,5,3);
+    QString theDate = testDate.toString(DATE_FORMAT);
+    qDebug() << theDate;
     RunningTime newTime = convertStringToTime("4:46.3");
     testEvent.setTime(newTime);
+    testEvent.setName("400 Meter Dash");
+    testEvent.setAthleteID(6);
+    testEvent.setDate(testDate);
+
+    qDebug() << "Adding Test Event.";
     result = addEvent(testEvent);
-    qDebug() << result;
-    findEventsForDate(result)
-    */
+    if (result != 0)
+    {
+        qDebug() << "Successfully added Event.";
+    }
+    else
+    {
+        qDebug() << "Failed to add Event.";
+        return;
+    }
+
+    qDebug() << "Update Event.";
+    newTime = convertStringToTime("5:05:10.0");
+    testEvent.setTime(newTime);
+    result = updateEvent(testEvent);
+    if (result == 1)
+    {
+        qDebug() << "Event successfully updated.";
+    }
+    else
+    {
+        qDebug() << "Failed to update Event.";
+        return;
+    }
+
+    qDebug() << "Searching for event based on date";
+    QList<RunningEvent> eventList = findEventsForDate(testEvent.returnAthleteID(),testDate);
+    for (int i = 0; i < eventList.size(); i++)
+    {
+        testEvent = eventList.at(i);
+        qDebug() << testEvent.returnEventName();
+        qDebug() << testEvent.returnDate().toString(DATE_FORMAT);
+        qDebug() << testEvent.returnTime().toString();
+    }
+    if (eventList.size() == 0)
+    {
+        qDebug() << "Event list is empty. Error in Database.";
+    }
+
 }
 
 //Adds an athlete to the database
@@ -311,13 +382,26 @@ bool RunnerDatabase::updateProfile(RunningProfile theProfile)
     //Acquire attributes
     QString profileName = theProfile.returnName();
     int IDNumber = theProfile.returnID();
+    QString IDNumberString = QString::number(IDNumber);
     QString athleteList = convertAthleteListToString(theProfile.returnAllAthletes());
     //Build SQL Command
     command = "UPDATE " + PROFILE_TABLE_NAME + " SET " + NAME_COLUMN + " = '" + profileName + "', " +
-            ATHLETE_LIST_COLUMN + " = '" +  athleteList + "' WHERE " + ID_COLUMN + " = " + IDNumber + ";";
+            ATHLETE_LIST_COLUMN + " = '" +  athleteList + "' WHERE " + ID_COLUMN + " = " + IDNumberString + ";";
     if (!databaseQuery.exec(command))
     {
         qDebug() << "Failed to update Profile '" + profileName + "' in Database.";
+        return false;
+    }
+    return true;
+}
+
+bool RunnerDatabase::removeProfile(int IDNumber)
+{
+    QSqlQuery databaseQuery;
+    QString command = "DELETE FROM " + PROFILE_TABLE_NAME + " WHERE " + ID_COLUMN + " = " + QString::number(IDNumber) + ";";
+    if (!databaseQuery.exec(command))
+    {
+        qDebug() << "Failed to remove Profile from Database.";
         return false;
     }
     return true;
@@ -330,12 +414,14 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     int IDNumber = 0;
     QString eventName = newEvent.returnEventName();
     QString eventTime = newEvent.returnTime().toString();
-    QString eventDate = newEvent.returnDate().toString("MM.DD.YYYY");
+    QString eventDate = newEvent.returnDate().toString(DATE_FORMAT);
     int athleteID = newEvent.returnAthleteID();
+    //Must convert to be accepted within the command statement
+    QString athleteIDString = QString::number(athleteID);
     //Now we create our insert statement
     command = "INSERT INTO " + EVENT_TABLE_NAME + " (" + NAME_COLUMN + ", " + EVENT_DATE_COLUMN + ", " +
             EVENT_TIME_COLUMN + ", " + RUNNER_COLUMN + ") VALUES ('" + eventName + "', '" + eventDate +
-            "', '" + eventTime + "', " + athleteID + ");";
+            "', '" + eventTime + "', " + athleteIDString + ");";
     //Execute
     if (!databaseQuery.exec(command))
     {
@@ -354,16 +440,18 @@ bool RunnerDatabase::updateEvent(RunningEvent theEvent)
     QSqlQuery databaseQuery;
     QString command;
     int eventID = theEvent.returnID();
+    QString eventIDString = QString::number(eventID);
     QString eventName = theEvent.returnEventName();
     QString eventTime = theEvent.returnTime().toString();
-    QString eventDate = theEvent.returnDate().toString("MM.DD.YYYY");
+    QString eventDate = theEvent.returnDate().toString(DATE_FORMAT);
     int athleteID = theEvent.returnAthleteID();
+    QString athleteIDString = QString::number(athleteID);
     command = "UPDATE " + EVENT_TABLE_NAME + " SET " + NAME_COLUMN + " ='" + eventName + "', " +
             EVENT_TIME_COLUMN + "='" + eventTime + "', " + EVENT_DATE_COLUMN + " ='" + eventDate +
-            "'," + RUNNER_COLUMN + "=" + athleteID + " WHERE " + ID_COLUMN + "=" + eventID;
+            "'," + RUNNER_COLUMN + "=" + athleteIDString + " WHERE " + ID_COLUMN + "=" + eventIDString;
     if (!databaseQuery.exec(command))
     {
-        qDebug() << "Failed to update Event " + eventName + "in Database.";
+        qDebug() << "Failed to update Event " + eventName + " in Database.";
         return false;
     }
     return true;
@@ -374,38 +462,48 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
     QList<RunningEvent> eventList;
     QSqlQuery databaseQuery;
     //Convert QDate to string
-    QString dateString = theDate.toString("MM.DD.YYYY");
-    QString command = "SELECT * FROM " + EVENT_TABLE_NAME + " WHERE " + RUNNER_COLUMN + " = " + athleteID + " AND "
-            + EVENT_DATE_COLUMN + " = '" + dateString + "';";
-    databaseQuery.exec(command);
-    while (!databaseQuery.next())
+    QString dateString = theDate.toString(DATE_FORMAT);
+    qDebug() << dateString;
+    QString command = "SELECT * FROM " + EVENT_TABLE_NAME + " WHERE (" + RUNNER_COLUMN + " = " + QString::number(athleteID) + " AND "
+            + EVENT_DATE_COLUMN + " = '" + dateString + "');";
+    if (databaseQuery.exec(command))
     {
-        //Create and retrieve each field of the event
-        //Convert values as necessary
-        RunningEvent newEvent;
-        int ID = databaseQuery.value(0).toInt();
-        int athleteID = databaseQuery.value(1).toInt();
-        QString eventName = databaseQuery.value(2).toString();
+        while (databaseQuery.next())
+        {
+            //Create and retrieve each field of the event
+            //Convert values as necessary
+            RunningEvent newEvent;
+            int ID = databaseQuery.value(0).toInt();
+            QString eventName = databaseQuery.value(1).toString();
+            int athleteID = databaseQuery.value(2).toInt();
 
-        //Acquire and convert time
-        QString eventTimeString = databaseQuery.value(3).toString();
-        RunningTime eventTime = convertStringToTime(eventTimeString);
+            //Acquire and convert time
+            QString eventTimeString = databaseQuery.value(3).toString();
+            RunningTime eventTime = convertStringToTime(eventTimeString);
 
-        //Acquire and convert date
-        //Date is in the format of 'MM.DD.YYYY'
-        QString eventDateString = databaseQuery.value(4).toString();
-        QDate eventDate;
-        //Acquire each field individually and convert to integer value
-        QString dateSubstring = eventDateString.section(".",0,0);
-        qDebug() << dateSubstring;
-        //Set values
-        newEvent.setID(ID);
-        newEvent.setAthleteID(athleteID);
-        newEvent.setName(eventName);
-        newEvent.setTime(eventTime);
-        newEvent.setDate(eventDate);
-        //Add to list
-        eventList.push_back(newEvent);
+            //Acquire and convert date
+            //Date is in the format of 'MM.DD.YYYY'
+            QString eventDateString = databaseQuery.value(4).toString();
+            QDate eventDate;
+            //Acquire each field individually and convert to integer value
+            int month = eventDateString.section(".",0,0).toInt();
+            int day = eventDateString.section(".",1,1).toInt();
+            int year = eventDateString.section(".",2,2).toInt();
+            eventDate.setDate(year,month,day);
+
+            //Set values
+            newEvent.setID(ID);
+            newEvent.setAthleteID(athleteID);
+            newEvent.setName(eventName);
+            newEvent.setTime(eventTime);
+            newEvent.setDate(eventDate);
+            //Add to list
+            eventList.push_back(newEvent);
+        }
+    }
+    else
+    {
+        qDebug() << "Failed to find events by date in Database.";
     }
     return eventList;
 }
