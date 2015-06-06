@@ -4,17 +4,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {   
     profileManager = NULL;
+    TheDatabase = NULL;
 
     //Setup designed UI
     setupUi(this);
 
     //Let's build a database
-    TheDatabase = new RunnerDatabase();
+    TheDatabase = new RunnerDatabase;
 
     //Updates dateEdit to be today's date
     dateEdit->setDate(QDate::currentDate());
-
-    //Load settings file
 
     //Build connections between buttons
     connect(editProfileButton,SIGNAL(clicked()),this,SLOT(openProfileManager()));
@@ -26,12 +25,15 @@ void MainWindow::openProfileManager()
     //Create a subwindow to access additionalfeatures retaining to the management of presaved profiles
     if (profileManager == NULL)
     {
+
         //Build Profile Window
-        profileManager = new ProfileWindow(NULL,TheDatabase);
+        //Passing this as the parent will ensure that when the parent dies, the child dies
+        profileManager = new ProfileWindow(this,TheDatabase);
         profileManager -> show();
         profileManager -> raise();
         profileManager -> setModal(true);
         profileManager -> activateWindow();
+
     }
     else
     {
@@ -43,20 +45,6 @@ void MainWindow::openProfileManager()
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)
 {
-    //Close Profile Manager if it is still open upon exit
-    if (profileManager != NULL)
-    {
-        profileManager -> hide();
-        profileManager -> close();
-        delete profileManager;
-    }
-
-    //Close Database connection
-    if (TheDatabase != NULL)
-    {
-        delete TheDatabase;
-    }
-
     theEvent -> accept();
 }
 

@@ -84,8 +84,8 @@ RunnerDatabase::RunnerDatabase()
 RunnerDatabase::~RunnerDatabase()
 {
     //Close connection
-    //DefaultDatabase.close();
-    //QSqlDatabase::removeDatabase("LocalDatabase.db");
+    DefaultDatabase.close();
+    QSqlDatabase::removeDatabase("LocalDatabase.db");
 }
 
 void RunnerDatabase::test()
@@ -401,6 +401,7 @@ bool RunnerDatabase::updateProfile(RunningProfile theProfile)
     return true;
 }
 
+//Removes a profile in the database
 bool RunnerDatabase::removeProfile(int IDNumber)
 {
     QSqlQuery databaseQuery;
@@ -413,6 +414,7 @@ bool RunnerDatabase::removeProfile(int IDNumber)
     return true;
 }
 
+//Adds an event to the database
 int RunnerDatabase::addEvent(RunningEvent &newEvent)
 {
     QSqlQuery databaseQuery;
@@ -526,7 +528,7 @@ bool RunnerDatabase::removeEvent(int IDNumber)
     return true;
 }
 
-// UTILITY FUNCTIONS FROM THIS POINT ON
+//UTILITY FUNCTIONS FROM THIS POINT ON
 
 QString RunnerDatabase::convertAthleteListToString(QList<Athlete> theList)
 {

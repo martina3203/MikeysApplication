@@ -16,7 +16,10 @@ class RunnerDatabase
 public:
     RunnerDatabase();
     ~RunnerDatabase();
+
+    //Test Function
     void test();
+
     //Methods related to the Athlete Table
     int addAthlete(Athlete&);
     bool removeAthlete(int);

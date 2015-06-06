@@ -5,6 +5,7 @@ ProfileWindow::ProfileWindow(QWidget *parent, RunnerDatabase * databaseAccess)
 {
     //Sets up window UI
     setupUi(this);
+    TheDatabase = NULL;
 
     //Add profile names to first list
     loadProfilesToList();
