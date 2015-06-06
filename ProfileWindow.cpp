@@ -1,33 +1,36 @@
 #include "ProfileWindow.h"
 
-ProfileWindow::ProfileWindow(QWidget *parent)
+ProfileWindow::ProfileWindow(QWidget *parent, RunnerDatabase * databaseAccess)
     : QDialog(parent)
 {
     //Sets up window UI
     setupUi(this);
-    //Read Profiles from Settings File
-    settingsFile.readFile("settings.txt");
-    if (settingsFile.returnFileLocations().size() == 0)
-    {
-        profileList -> addItem("NO PROFILES FOUND");
-        return;
-    }
+
     //Add profile names to first list
     loadProfilesToList();
+    //Grab pointer to Database Access Object
+    TheDatabase = databaseAccess;
 
-
-    //Form Connections
-    connect(profileList,SIGNAL(itemPressed(QListWidgetItem*)),this,SLOT(showSelectedProfileInfo()));
-    connect(profileAddButton,SIGNAL(clicked()),this,SLOT(addNewProfile()));
-    connect(profileRemoveButton,SIGNAL(clicked()),this,SLOT(removeProfile()));
+    //Form Connections for buttons
+    connect(ProfileList,SIGNAL(itemPressed(QListWidgetItem*)),this,SLOT(showSelectedProfileInfo()));
+    connect(ProfileAddButton,SIGNAL(clicked()),this,SLOT(addNewProfile()));
+    connect(ProfileRemoveButton,SIGNAL(clicked()),this,SLOT(removeProfile()));
     connect(AthleteAddButton,SIGNAL(clicked()),this,SLOT(addNewAthlete()));
     connect(AthleteRemoveButton,SIGNAL(clicked()),this,SLOT(removeAthlete()));
-    connect(buttonBox,SIGNAL(accepted()),this,SLOT(closeAndSave()));
+    connect(ButtonBox,SIGNAL(accepted()),this,SLOT(closeAndSave()));
 }
 
 void ProfileWindow::loadProfilesToList()
 {
-
+    QList<RunningProfile> profileList = TheDatabase->returnAllProfiles();
+    //Add profiles to first list
+    for (int i = 0; i < profileList.size(); i++)
+    {
+        RunningProfile currentProfile = profileList.at(i);
+        QString currentProfileName = currentProfile.returnName();
+        ProfileList -> addItem(currentProfileName);
+    }
+    //Then to save time we will preload all of the available running profile athletes
 }
 
 void ProfileWindow::addNewProfile()
@@ -38,7 +41,9 @@ void ProfileWindow::addNewProfile()
 void ProfileWindow::addNewAthlete()
 {
     QString stringFromLineEdit = AthleteLineEdit->text();
-    if ((stringFromLineEdit != "") && (stringFromLineEdit != " "))
+    QString stringFromLineEditWithoutSpaces = stringFromLineEdit.remove(' ');
+    //If the string is not empty
+    if ((stringFromLineEditWithoutSpaces != ""))
     {
         return;
     }
@@ -51,7 +56,7 @@ void ProfileWindow::addNewAthlete()
 void ProfileWindow::removeProfile()
 {
     //Deletes all selected items
-    qDeleteAll(profileList->selectedItems());
+    qDeleteAll(ProfileList->selectedItems());
 }
 
 void ProfileWindow::removeAthlete()

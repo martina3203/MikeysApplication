@@ -14,7 +14,6 @@ TEMPLATE = app
 
 
 SOURCES +=\
-    settings.cpp \
     RunningProfile.cpp \
     RunningEvent.cpp \
     RunningTime.cpp \
@@ -25,7 +24,6 @@ SOURCES +=\
     RunnerDatabase.cpp
 
 HEADERS  += \
-    settings.h \
     Athlete.h \
     MainWindow.h \
     ProfileWindow.h \

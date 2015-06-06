@@ -79,16 +79,13 @@ RunnerDatabase::RunnerDatabase()
             qDebug() << "Profile Table Created.";
         }
     }
-
-    test();
-
 }
 
 RunnerDatabase::~RunnerDatabase()
 {
     //Close connection
-    DefaultDatabase.close();
-    QSqlDatabase::removeDatabase("LocalDatabase.db");
+    //DefaultDatabase.close();
+    //QSqlDatabase::removeDatabase("LocalDatabase.db");
 }
 
 void RunnerDatabase::test()

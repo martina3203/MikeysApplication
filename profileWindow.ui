@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>profileDialog</class>
- <widget class="QDialog" name="profileDialog">
+ <class>ProfileDialog</class>
+ <widget class="QDialog" name="ProfileDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -21,14 +21,14 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLabel" name="profileLabel">
+          <widget class="QLabel" name="ProfileLabel">
            <property name="text">
             <string>Selected Profile:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="profileList">
+          <widget class="QListWidget" name="ProfileList">
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
            </property>
@@ -37,26 +37,26 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QLabel" name="profileLineLabel">
+            <widget class="QLabel" name="ProfileLineLabel">
              <property name="text">
               <string>New Profile:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="profileLineEdit"/>
+            <widget class="QLineEdit" name="ProfileLineEdit"/>
            </item>
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <widget class="QPushButton" name="profileAddButton">
+              <widget class="QPushButton" name="ProfileAddButton">
                <property name="text">
                 <string>Add...</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="profileRemoveButton">
+              <widget class="QPushButton" name="ProfileRemoveButton">
                <property name="text">
                 <string>Remove...</string>
                </property>
@@ -121,7 +121,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
+      <widget class="QDialogButtonBox" name="ButtonBox">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -137,9 +137,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>ButtonBox</sender>
    <signal>accepted()</signal>
-   <receiver>profileDialog</receiver>
+   <receiver>ProfileDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -153,9 +153,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>ButtonBox</sender>
    <signal>rejected()</signal>
-   <receiver>profileDialog</receiver>
+   <receiver>ProfileDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

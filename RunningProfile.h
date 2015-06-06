@@ -28,4 +28,6 @@ class RunningProfile
         QList<Athlete> ListOfAthletes;
 };
 
+QString convertAthleteListToString(QList<Athlete>);
+
 #endif // RunningProfile_H

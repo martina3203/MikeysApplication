@@ -103,3 +103,16 @@ RunningProfile::~RunningProfile()
 {
     //Destructor
 }
+
+
+QString convertAthleteListToString(QList<Athlete> athleteList)
+{
+    QString returnString = "";
+    for (int i = 0; i < athleteList.size(); i++)
+    {
+        Athlete currentAthlete = athleteList.at(i);
+        QString IDString = QString::number(currentAthlete.returnID());
+        returnString = returnString + IDString + ",";
+    }
+    return returnString;
+}

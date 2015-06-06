@@ -2,6 +2,7 @@
 #define MainWindow_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 #include "ProfileWindow.h"
 #include "RunnerDatabase.h"
 #include "ui_MainWindow.h"
@@ -21,7 +22,7 @@ public slots:
 
 private:
     ProfileWindow * profileManager;
-    RunnerDatabase TheDatabase;
+    RunnerDatabase * TheDatabase;
 };
 
 #endif // MainWindow_H

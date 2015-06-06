@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupUi(this);
 
     //Let's build a database
-
+    TheDatabase = new RunnerDatabase();
 
     //Updates dateEdit to be today's date
     dateEdit->setDate(QDate::currentDate());
@@ -26,7 +26,8 @@ void MainWindow::openProfileManager()
     //Create a subwindow to access additionalfeatures retaining to the management of presaved profiles
     if (profileManager == NULL)
     {
-        profileManager = new ProfileWindow;
+        //Build Profile Window
+        profileManager = new ProfileWindow(NULL,TheDatabase);
         profileManager -> show();
         profileManager -> raise();
         profileManager -> setModal(true);
@@ -40,7 +41,7 @@ void MainWindow::openProfileManager()
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent*)
+void MainWindow::closeEvent(QCloseEvent* theEvent)
 {
     //Close Profile Manager if it is still open upon exit
     if (profileManager != NULL)
@@ -49,6 +50,14 @@ void MainWindow::closeEvent(QCloseEvent*)
         profileManager -> close();
         delete profileManager;
     }
+
+    //Close Database connection
+    if (TheDatabase != NULL)
+    {
+        delete TheDatabase;
+    }
+
+    theEvent -> accept();
 }
 
 MainWindow::~MainWindow()
@@ -57,5 +66,11 @@ MainWindow::~MainWindow()
     if (profileManager != NULL)
     {
         delete profileManager;
+    }
+
+    //Cleans up memory associated with database access object
+    if (TheDatabase != NULL)
+    {
+        delete TheDatabase;
     }
 }

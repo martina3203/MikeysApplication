@@ -5,15 +5,15 @@
 #include <QDialog>
 #include <QString>
 #include "ui_ProfileWindow.h"
-#include "settings.h"
+#include "RunnerDatabase.h"
 #include "RunningProfile.h"
 
-class ProfileWindow : public QDialog,public Ui_profileDialog
+class ProfileWindow : public QDialog,public Ui_ProfileDialog
 {
     Q_OBJECT
 
 public:
-    ProfileWindow(QWidget *parent = 0);
+    ProfileWindow(QWidget *parent = 0, RunnerDatabase * databaseAccess = NULL);
     void loadProfilesToList();
     ~ProfileWindow();
 
@@ -26,9 +26,8 @@ public slots:
     void closeAndSave();
 
 private:
-    settings settingsFile;
     RunningProfile loadedProfile;
-    std::vector<RunningProfile> savedProfiles;
+    RunnerDatabase * TheDatabase;
 
 };
 
