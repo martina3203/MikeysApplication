@@ -24,20 +24,17 @@ ProfileWindow::ProfileWindow(QWidget *parent, RunnerDatabase * databaseAccess)
 
 void ProfileWindow::loadProfilesToList()
 {
-    //Remove anything that might already list in the list
+    //Remove anything that might already in the list
     ProfileList->clear();
-    QList<RunningProfile> profileList = TheDatabase->returnAllProfiles();
+    LoadedProfileList = TheDatabase->returnAllProfiles();
     //Add profiles to first list
-    for (int i = 0; i < profileList.size(); i++)
+    for (int i = 0; i < LoadedProfileList.size(); i++)
     {
-        RunningProfile currentProfile = profileList.at(i);
+        RunningProfile currentProfile = LoadedProfileList.at(i);
         QString currentProfileName = currentProfile.returnName();
         //Add to display list
         ProfileList -> addItem(currentProfileName);
-        //And finally to the LoadedProfileList
-        LoadedProfileList.append(currentProfile);
     }
-    //Then to save time we will preload all of the available running profile athletes
 }
 
 void ProfileWindow::addNewProfile()
@@ -51,37 +48,41 @@ void ProfileWindow::addNewProfile()
         //Take the string and build a profile out of it
         RunningProfile newProfile;
         newProfile.setName(stringFromLineEdit);
-        //Add it to the database
-        if (TheDatabase->addProfile(newProfile) == 0)
-        {
-            //Fail statement as the value should be it's ID in the database
-            qDebug() << "Failed to add to Database from Profile Window.";
-        }
-        else
-        {
-            //Now update the list of profiles
-            qDebug() << "Profiles should be loading.";
-            loadProfilesToList();
-        }
+        //Add it to the list
+        LoadedProfileList.append(newProfile);
+        updateProfileList();
         return;
     }
     else
     {
+        //Display empty string message
         return;
     }
 }
 
 void ProfileWindow::addNewAthlete()
 {
+    LoadedProfileIndex = ProfileList -> currentRow();
+    RunningProfile currentProfile = LoadedProfileList.at(LoadedProfileIndex);
     QString stringFromLineEdit = AthleteLineEdit->text();
-    QString stringFromLineEditWithoutSpaces = stringFromLineEdit.remove(' ');
+    QString EmptyStringCheck = stringFromLineEdit;
+    EmptyStringCheck.remove(' ');
     //If the string is not empty
-    if ((stringFromLineEditWithoutSpaces != ""))
+    if ((EmptyStringCheck != ""))
     {
+        Athlete newAthlete;
+        newAthlete.setAthleteName(stringFromLineEdit);
+        currentProfile.addAthlete(newAthlete);
+        //Now update the profile back to the list
+        LoadedProfileList.replace(LoadedProfileIndex,currentProfile);
+        //We are not adding him to the database though.
+        //We will ask that the user wants to save his changes first.
         return;
     }
     else
     {
+        //Display empty string message
+        qDebug() << "Empty String";
         return;
     }
 }
@@ -89,31 +90,58 @@ void ProfileWindow::addNewAthlete()
 void ProfileWindow::removeProfile()
 {
     //Find this profile and delete it from the database
-    int currentProfileSelected = ProfileList->currentRow();
-    RunningProfile currentProfile = LoadedProfileList.at(currentProfileSelected);
-    if (!(TheDatabase->removeProfile(currentProfile.returnID())))
-    {
-        //Fail statement
-        qDebug() << "Failed to remove profile from Profile Window.";
-    }
+    LoadedProfileIndex = ProfileList->currentRow();
+    LoadedProfileList.removeAt(LoadedProfileIndex);
     //Deletes all selected items from the list and reloads list
-    loadProfilesToList();
+    updateProfileList();
 }
 
 void ProfileWindow::removeAthlete()
 {
-    //Deletes all selected items
-    qDeleteAll(AthleteList->selectedItems());
+    int athletePosition = AthleteList->currentRow();
+    RunningProfile currentProfile = LoadedProfileList.at(LoadedProfileIndex);
+    QList<Athlete> loadedAthleteList = currentProfile.returnAllAthletes();
+    //Remove from the associated profile
+    loadedAthleteList.removeAt(athletePosition);
+    currentProfile.updateAthleteList(loadedAthleteList);
+    //Now we are gonna update the profile in the list
+    LoadedProfileList.replace(LoadedProfileIndex,currentProfile);
+    //Update the Athlete List after the changes
+    //Write to database later
+    showSelectedProfileInfo();
 }
 
 void ProfileWindow::showSelectedProfileInfo()
 {
     //When a profile is clicked, it will show all of the athletes associated with it
+    LoadedProfileIndex = ProfileList->currentRow();
+    RunningProfile currentProfile = LoadedProfileList.at(LoadedProfileIndex);
+    //Clear the athlete list
+    AthleteList->clear();
+    //Now load all of the associated Athletes
+    QList<Athlete> loadedAthleteList = currentProfile.returnAllAthletes();
+    for (int i = 0; i < loadedAthleteList.size(); i++)
+    {
+        Athlete currentAthlete = loadedAthleteList.at(i);
+        QString athleteName = currentAthlete.returnName();
+        AthleteList->addItem(athleteName);
+    }
 }
 
 void ProfileWindow::closeAndSave()
 {
 
+}
+
+void ProfileWindow::updateProfileList()
+{
+    for (int i = 0; i < LoadedProfileList.size(); i++)
+    {
+        RunningProfile currentProfile = LoadedProfileList.at(i);
+        QString currentProfileName = currentProfile.returnName();
+        //Add to display list
+        ProfileList -> addItem(currentProfileName);
+    }
 }
 
 ProfileWindow::~ProfileWindow()

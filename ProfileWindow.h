@@ -26,6 +26,7 @@ public slots:
     void closeAndSave();
 
 private:
+    void updateProfileList();
     //This is it's index in the list
     int LoadedProfileIndex;
     QList<RunningProfile> LoadedProfileList;
