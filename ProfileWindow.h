@@ -26,7 +26,9 @@ public slots:
     void closeAndSave();
 
 private:
-    RunningProfile loadedProfile;
+    //This is it's index in the list
+    int LoadedProfileIndex;
+    QList<RunningProfile> LoadedProfileList;
     RunnerDatabase * TheDatabase;
 
 };
