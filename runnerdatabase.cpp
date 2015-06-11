@@ -151,14 +151,17 @@ void RunnerDatabase::test()
     RunningProfile testProfile;
     testProfile.setName("Test Profile");
     addProfile(testProfile);
+    testProfile.setName("Not a test profile");
+    addProfile(testProfile);
     //Query of All Profiles
     QList<RunningProfile> testList = returnAllProfiles();
+    qDebug() << "Find all Profiles";
     for (int i = 0; i < testList.size(); i++)
     {
         testProfile = testList.at(i);
         qDebug() << testProfile.returnName();
     }
-
+    qDebug() << "If there is no values, we have a problem.";
     //Update Profile
     qDebug() << "Testing Updating by changing profile name";
     testProfile.setName("Not Test Profile");
@@ -366,6 +369,7 @@ QList<RunningProfile> RunnerDatabase::returnAllProfiles()
             RunningProfile returnedProfile;
             //Grab ID
             int IDNumber = databaseQuery.value(0).toInt();
+            qDebug() << IDNumber;
             returnedProfile.setID(IDNumber);
             //Grab Name
             QString profileName = databaseQuery.value(1).toString();

@@ -2,6 +2,7 @@
 #define ProfileWindow_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QDialog>
 #include <QString>
 #include "ui_ProfileWindow.h"
@@ -24,14 +25,17 @@ public slots:
     void removeAthlete();
     void showSelectedProfileInfo();
     void closeAndSave();
+    void SaveChangesToDatabase();
 
 private:
     void updateProfileList();
     //This is it's index in the list
     int LoadedProfileIndex;
     QList<RunningProfile> LoadedProfileList;
+    QList<RunningProfile> RemovedProfiles;
+    QList<Athlete> RemovedAthletes;
     RunnerDatabase * TheDatabase;
-
+    bool ChangesMade;
 };
 
 #endif // ProfileWindow_H
