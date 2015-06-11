@@ -58,4 +58,6 @@ private:
     QSqlDatabase DefaultDatabase;
 };
 
+void SQLString(QString&);
+
 #endif // RUNNERDATABASE_H

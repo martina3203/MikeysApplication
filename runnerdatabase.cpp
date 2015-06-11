@@ -255,6 +255,8 @@ int RunnerDatabase::addAthlete(Athlete &newAthlete)
     QSqlQuery databaseQuery;
     int IDNumber = 0;
     QString athleteName = newAthlete.returnName();
+    //Ensure SQL compatibility
+    SQLString(athleteName);
     QString command = "INSERT INTO " + RUNNER_TABLE_NAME + " (" + NAME_COLUMN + ") VALUES ('" + athleteName + "');";
     if (!databaseQuery.exec(command))
     {
@@ -333,6 +335,7 @@ int RunnerDatabase::addProfile(RunningProfile &newProfile)
     //This is stored as a string in the database of comma seperated numbers
     QList<Athlete> athleteList = newProfile.returnAllAthletes();
     QString profileName = newProfile.returnName();
+    SQLString(profileName);
     QString IDList = convertAthleteListToString(newProfile.returnAllAthletes());
     int IDNumber = 0;
     command = "INSERT INTO " + PROFILE_TABLE_NAME + " (" + NAME_COLUMN + ", " + ATHLETE_LIST_COLUMN + ") VALUES ('"
@@ -369,7 +372,6 @@ QList<RunningProfile> RunnerDatabase::returnAllProfiles()
             RunningProfile returnedProfile;
             //Grab ID
             int IDNumber = databaseQuery.value(0).toInt();
-            qDebug() << IDNumber;
             returnedProfile.setID(IDNumber);
             //Grab Name
             QString profileName = databaseQuery.value(1).toString();
@@ -391,6 +393,8 @@ bool RunnerDatabase::updateProfile(RunningProfile theProfile)
     QString command;
     //Acquire attributes
     QString profileName = theProfile.returnName();
+    //Ensure SQL compatibility
+    SQLString(profileName);
     int IDNumber = theProfile.returnID();
     QString IDNumberString = QString::number(IDNumber);
     QString athleteList = convertAthleteListToString(theProfile.returnAllAthletes());
@@ -425,8 +429,11 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     QString command;
     int IDNumber = 0;
     QString eventName = newEvent.returnEventName();
+    SQLString(eventName);
     QString eventTime = newEvent.returnTime().toString();
+    SQLString(eventTime);
     QString eventDate = newEvent.returnDate().toString(DATE_FORMAT);
+    SQLString(eventDate);
     int athleteID = newEvent.returnAthleteID();
     //Must convert to be accepted within the command statement
     QString athleteIDString = QString::number(athleteID);
@@ -454,8 +461,11 @@ bool RunnerDatabase::updateEvent(RunningEvent theEvent)
     int eventID = theEvent.returnID();
     QString eventIDString = QString::number(eventID);
     QString eventName = theEvent.returnEventName();
+    SQLString(eventName);
     QString eventTime = theEvent.returnTime().toString();
+    SQLString(eventTime);
     QString eventDate = theEvent.returnDate().toString(DATE_FORMAT);
+    SQLString(eventDate);
     int athleteID = theEvent.returnAthleteID();
     QString athleteIDString = QString::number(athleteID);
     command = "UPDATE " + EVENT_TABLE_NAME + " SET " + NAME_COLUMN + " ='" + eventName + "', " +
@@ -547,4 +557,10 @@ QString RunnerDatabase::convertAthleteListToString(QList<Athlete> theList)
         IDList = IDList + convertedNumber + ",";
     }
     return IDList;
+}
+
+//This replaces characters that break SQL statements with valid characters that maintain the meaning
+void SQLString(QString &theString)
+{
+    theString.replace("'","''");
 }
