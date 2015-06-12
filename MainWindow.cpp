@@ -3,7 +3,6 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {   
-    profileManager = NULL;
     TheDatabase = NULL;
 
     //Setup designed UI
@@ -22,25 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::openProfileManager()
 {
-    //Create a subwindow to access additionalfeatures retaining to the management of presaved profiles
-    if (profileManager == NULL)
-    {
-
-        //Build Profile Window
-        //Passing this as the parent will ensure that when the parent dies, the child dies
-        profileManager = new ProfileWindow(this,TheDatabase);
-        profileManager -> show();
-        profileManager -> raise();
-        profileManager -> setModal(true);
-        profileManager -> activateWindow();
-
-    }
-    else
-    {
-        profileManager -> show();
-        profileManager -> raise();
-        profileManager -> activateWindow();
-    }
+    //Create a subwindow to access additional features retaining to the management of presaved profiles
+    //Will wait til window is closed before proceeding
+    ProfileWindow profileWindow(this,TheDatabase);
+    profileWindow.exec();
 }
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)
@@ -50,12 +34,6 @@ void MainWindow::closeEvent(QCloseEvent* theEvent)
 
 MainWindow::~MainWindow()
 {
-    //Cleans up memory taken by the Profile Manager
-    if (profileManager != NULL)
-    {
-        delete profileManager;
-    }
-
     //Cleans up memory associated with database access object
     if (TheDatabase != NULL)
     {

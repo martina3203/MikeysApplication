@@ -17,11 +17,87 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
+      <widget class="QLabel" name="ProfileManagerLabel">
+       <property name="font">
+        <font>
+         <family>Segoe UI Black</family>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+         <underline>false</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>Profile Manager:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ProfileManagerDescriptionLabel">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>In this Window, you shall create Profiles for various groups of runners that may have similiar workouts (Examples: Boys Distance, Girl Sprinters) and add corresponding Athletes to these list. This makes adding and tracking workouts easier. 
+Simply create and/or select a profile on the left list and the corresponding athletes will appear on the right list. 
+You may also add and remove athletes as needed. Once finished, click Ok and confirm your changes. If you done messed up, don't worry. Just hit Cancel and your changes will not be saved.</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="DescriptionSeperator">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>10</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="lineWidth">
+        <number>2</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <widget class="QLabel" name="ProfileLabel">
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>Selected Profile:</string>
            </property>
@@ -29,8 +105,16 @@
          </item>
          <item>
           <widget class="QListWidget" name="ProfileList">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="spacing">
+            <number>2</number>
            </property>
            <property name="currentRow">
             <number>-1</number>
@@ -41,6 +125,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QLabel" name="ProfileLineLabel">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>New Profile:</string>
              </property>
@@ -53,6 +143,12 @@
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
               <widget class="QPushButton" name="ProfileAddButton">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Add...</string>
                </property>
@@ -60,6 +156,12 @@
              </item>
              <item>
               <widget class="QPushButton" name="ProfileRemoveButton">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Remove...</string>
                </property>
@@ -72,9 +174,28 @@
         </layout>
        </item>
        <item>
+        <widget class="Line" name="ListSeperator">
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="AthleteLabel">
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>List of Athletes:</string>
            </property>
@@ -82,6 +203,11 @@
          </item>
          <item>
           <widget class="QListWidget" name="AthleteList">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
            </property>
@@ -91,6 +217,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="AthleteLineLabel">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>New Athlete:</string>
              </property>
@@ -103,6 +235,12 @@
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
               <widget class="QPushButton" name="AthleteAddButton">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Add...</string>
                </property>
@@ -110,6 +248,12 @@
              </item>
              <item>
               <widget class="QPushButton" name="AthleteRemoveButton">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Remove...</string>
                </property>
@@ -125,6 +269,12 @@
      </item>
      <item>
       <widget class="QDialogButtonBox" name="ButtonBox">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

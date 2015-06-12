@@ -21,7 +21,6 @@ public slots:
     void closeEvent(QCloseEvent*);
 
 private:
-    ProfileWindow * profileManager;
     RunnerDatabase * TheDatabase;
 };
 

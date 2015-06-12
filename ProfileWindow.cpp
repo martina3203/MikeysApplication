@@ -54,8 +54,9 @@ void ProfileWindow::addNewProfile()
         //Add it to the list
         LoadedProfileList.append(newProfile);
         updateProfileList();
-        //Update the list view
-        ProfileList->setCurrentRow(LoadedProfileList.size()-1);
+        //Update the list view and clear the Line Edit field
+        ProfileList -> setCurrentRow(LoadedProfileList.size()-1);
+        ProfileLineEdit -> clear();
         showSelectedProfileInfo();
         return;
     }
@@ -84,7 +85,8 @@ void ProfileWindow::addNewAthlete()
         LoadedProfileList.replace(LoadedProfileIndex,currentProfile);
         //We are not adding him to the database though.
         //We will ask that the user wants to save his changes first.
-        //Update Athlete list
+        //Update Athlete list and clear the Line Edit field
+        AthleteLineEdit->clear();
         showSelectedProfileInfo();
         return;
     }
@@ -107,6 +109,7 @@ void ProfileWindow::removeProfile()
     //Remove from current list
     LoadedProfileList.removeAt(LoadedProfileIndex);
     //Deletes all selected items from the list and reloads list
+    AthleteList->clear();
     updateProfileList();
 }
 
