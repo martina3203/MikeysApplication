@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     dateEdit->setDate(QDate::currentDate());
 
     //Build connections between buttons
-    connect(editProfileButton,SIGNAL(clicked()),this,SLOT(openProfileManager()));
+    connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
 
 }
 
