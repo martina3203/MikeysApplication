@@ -21,7 +21,8 @@ SOURCES +=\
     MainWindow.cpp \
     Main.cpp \
     Athlete.cpp \
-    RunnerDatabase.cpp
+    RunnerDatabase.cpp \
+    WorkoutWindow.cpp
 
 HEADERS  += \
     Athlete.h \
@@ -30,8 +31,10 @@ HEADERS  += \
     RunningProfile.h \
     RunningTime.h \
     RunningEvent.h \
-    RunnerDatabase.h
+    RunnerDatabase.h \
+    WorkoutWindow.h
 
 FORMS += \
     MainWindow.ui \
-    ProfileWindow.ui
+    ProfileWindow.ui \
+    WorkoutWindow.ui

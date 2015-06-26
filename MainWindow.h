@@ -5,6 +5,7 @@
 #include <QCloseEvent>
 #include "ProfileWindow.h"
 #include "RunnerDatabase.h"
+#include "WorkoutWindow.h"
 #include "ui_MainWindow.h"
 
 class MainWindow : public QMainWindow, public Ui_MainWindow
@@ -18,6 +19,7 @@ signals:
 
 public slots:
     void openProfileManager();
+    void openWorkoutManager();
     void closeEvent(QCloseEvent*);
 
 private:

@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="DateAndProfileHorizontal">
+     <layout class="QHBoxLayout" name="DateAndProfileHorizontalLayout">
       <property name="spacing">
        <number>3</number>
       </property>
@@ -24,7 +24,7 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QGroupBox" name="dateBox">
+       <widget class="QGroupBox" name="DateBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -51,7 +51,7 @@
           <enum>QLayout::SetMinAndMaxSize</enum>
          </property>
          <item>
-          <widget class="QDateEdit" name="dateEdit">
+          <widget class="QDateEdit" name="DateEdit">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -136,7 +136,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="ActionsGroupBox">
         <property name="minimumSize">
          <size>
           <width>270</width>
@@ -152,7 +152,7 @@
         <property name="title">
          <string>Actions:</string>
         </property>
-        <widget class="QPushButton" name="AddWorkoutButton">
+        <widget class="QPushButton" name="WorkoutButton">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -210,7 +210,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <property name="tabBarAutoHide">
          <bool>false</bool>
@@ -232,7 +232,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="AthletesLabel">
               <property name="maximumSize">
                <size>
                 <width>200</width>
@@ -245,7 +245,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QListWidget" name="listWidget">
+             <widget class="QListWidget" name="AthletesList">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
@@ -277,14 +277,14 @@
              <enum>QLayout::SetDefaultConstraint</enum>
             </property>
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="EntriesLabel">
               <property name="text">
                <string>Entries on that Profile:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QTableWidget" name="tableWidget">
+             <widget class="QTableWidget" name="EntriesTable">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
@@ -344,7 +344,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="Menubar">
    <property name="geometry">
     <rect>
      <x>0</x>

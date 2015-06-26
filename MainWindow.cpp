@@ -12,10 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     TheDatabase = new RunnerDatabase;
 
     //Updates dateEdit to be today's date
-    dateEdit->setDate(QDate::currentDate());
+    DateEdit->setDate(QDate::currentDate());
 
     //Build connections between buttons
     connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
+    connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
 
 }
 
@@ -25,6 +26,12 @@ void MainWindow::openProfileManager()
     //Will wait til window is closed before proceeding
     ProfileWindow profileWindow(this,TheDatabase);
     profileWindow.exec();
+}
+
+void MainWindow::openWorkoutManager()
+{
+    WorkoutWindow workoutWindow;
+    workoutWindow.exec();
 }
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)

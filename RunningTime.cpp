@@ -143,7 +143,8 @@ QString RunningTime::toString()
         }
         returnString = hoursString + ":";
     }
-    //Only omit if there if minutes is 0 and hours is 0
+    
+    //Only omit if minutes is 0 and hours is 0
     if ((Minutes != 0) || (Hours != 0))
     {
         if (Minutes < 10)
@@ -164,12 +165,12 @@ QString RunningTime::toString()
     if (Miliseconds != 0)
     {
         returnString = returnString + ".";
+        //Add zero if necessary
         if (Miliseconds < 10)
         {
             milisecondsString = "0" + milisecondsString;
         }
         returnString = returnString + milisecondsString;
-
     }
     return returnString;
 }
@@ -325,7 +326,7 @@ RunningTime convertStringToTime(QString timeString)
         }
     }
     int currentPosition = 0;
-    int convertedNumber = 0;
+    int convertedNumber;
     //Dealing with a time in Hours
     if (colonCounter == 2)
     {
@@ -342,8 +343,7 @@ RunningTime convertStringToTime(QString timeString)
         //Move to next position
         currentPosition++;
     }
-
-    //Now the Minutes position. Parse until we find the ':' symbol
+    //Now the Minutes position
     if (colonCounter >= 1)
     {
         timeSegment = "";
@@ -358,24 +358,20 @@ RunningTime convertStringToTime(QString timeString)
         //Move to next position
         currentPosition++;
     }
-    //And now, the seconds position. Parse until we find a period or just the end of the string
-    qDebug() << timeSegment;
-    timeSegment = "";
-    while ((timeString.at(currentPosition) != '.') && (currentPosition < (timeString.size()-1)))
+    if (colonCounter >= 0)
     {
-        timeSegment = timeSegment + timeString.at(currentPosition);
+        timeSegment = "";
+        while ((timeString.at(currentPosition) != '.') && (currentPosition < (timeString.size()-1)))
+        {
+            timeSegment = timeSegment + timeString.at(currentPosition);
+            currentPosition++;
+        }
+        convertedNumber = timeSegment.toInt();
+        convertedTime.setSeconds(convertedNumber);
+        convertedNumber = 0;
+        //Move to next position, if one should exist
         currentPosition++;
     }
-    if (currentPosition == (timeString.size()-1))
-    {
-        timeSegment = timeSegment + timeString.at(currentPosition);
-    }
-    convertedNumber = timeSegment.toInt();
-    qDebug() << convertedNumber;
-    convertedTime.setSeconds(convertedNumber);
-    convertedNumber = 0;
-    //Move to next position, if one should exist
-    currentPosition++;
     //We may have a significant milisecond value
     if (periodFound == true)
     {
