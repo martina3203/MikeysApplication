@@ -43,7 +43,43 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="label_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="CurrentProfileLabel">
+            <property name="text">
+             <string>Current Profile:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="ProfileNameLabel">
+            <property name="text">
+             <string>PROFILE_NAME</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="CurrentDateLabel">
+            <property name="text">
+             <string>Current Date:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="WorkoutDateLabel">
+            <property name="text">
+             <string>QDATE</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="EventNameLabel">
           <property name="text">
            <string>Event Name:</string>
           </property>

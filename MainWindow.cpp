@@ -48,8 +48,12 @@ void MainWindow::openWorkoutManager()
 {
     //Acquire the current profile selected
     RunningProfile currentProfile;
+    int listPosition = SelectProfileComboBox->currentIndex();
+    currentProfile = ProfileListing.at(listPosition);
+    //Acquire selected date
+    QDate selectedDate = DateEdit->date();
     //Open Workout window
-    WorkoutWindow workoutWindow(TheDatabase,currentProfile);
+    WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate);
     workoutWindow.exec();
 }
 
