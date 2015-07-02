@@ -14,10 +14,26 @@ MainWindow::MainWindow(QWidget *parent) :
     //Updates dateEdit to be today's date
     DateEdit->setDate(QDate::currentDate());
 
+    //Update Profile Listing ComboBox
+    loadProfiles();
+
     //Build connections between buttons
     connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
     connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
 
+}
+
+void MainWindow::loadProfiles()
+{
+    //Load Profiles to Window list
+    ProfileListing = TheDatabase->returnAllProfiles();
+    //Updating listing in drop down box
+    SelectProfileComboBox->clear();
+    for (int i = 0; i < ProfileListing.size(); i++)
+    {
+        RunningProfile currentProfile = ProfileListing.at(i);
+        SelectProfileComboBox->addItem(currentProfile.returnName());
+    }
 }
 
 void MainWindow::openProfileManager()
@@ -30,7 +46,10 @@ void MainWindow::openProfileManager()
 
 void MainWindow::openWorkoutManager()
 {
-    WorkoutWindow workoutWindow;
+    //Acquire the current profile selected
+    RunningProfile currentProfile;
+    //Open Workout window
+    WorkoutWindow workoutWindow(TheDatabase,currentProfile);
     workoutWindow.exec();
 }
 

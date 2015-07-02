@@ -1,7 +1,10 @@
 #include "WorkoutWindow.h"
 
-WorkoutWindow::WorkoutWindow()
+WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile selectedProfile)
 {
     setupUi(this);
+
+    TheDatabase = databasePointer;
+    CurrentProfile = selectedProfile;
 }
 

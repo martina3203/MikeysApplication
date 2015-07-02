@@ -21,9 +21,11 @@ public slots:
     void openProfileManager();
     void openWorkoutManager();
     void closeEvent(QCloseEvent*);
+    void loadProfiles();
 
 private:
     RunnerDatabase * TheDatabase;
+    QList<RunningProfile> ProfileListing;
 };
 
 #endif // MainWindow_H
