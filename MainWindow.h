@@ -14,14 +14,16 @@ class MainWindow : public QMainWindow, public Ui_MainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void loadProfiles();
+    void loadAthleteEvents();
 
 signals:
 
 public slots:
     void openProfileManager();
     void openWorkoutManager();
+    bool loadAthletesFromProfile();
     void closeEvent(QCloseEvent*);
-    void loadProfiles();
 
 private:
     RunnerDatabase * TheDatabase;
