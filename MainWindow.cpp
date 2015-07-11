@@ -18,11 +18,33 @@ MainWindow::MainWindow(QWidget *parent) :
     loadProfiles();
     loadAthletesFromProfile();
 
-    //Build connections between buttons
+    //Build connections between buttons and list
     connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
     connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
+    //Loads Profile/Athletes on selection
     connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadAthletesFromProfile()));
+    //Loads events corresponding to date and profile
+    connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadEvents()));
+    //Loads Events for display from prepared list
+    connect(AthleteList,SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),this,SLOT(displayEventsForSelection()));
+}
 
+void MainWindow::loadEvents()
+{
+    return;
+}
+
+void MainWindow::displayEventsForSelection()
+{
+    int index = AthleteList->currentRow();
+    if (index == 0)
+    {
+        loadEventsForAllAthletes();
+    }
+    else
+    {
+        loadEventsForSelectedAthlete();
+    }
 }
 
 void MainWindow::loadProfiles()
@@ -64,6 +86,32 @@ bool MainWindow::loadAthletesFromProfile()
     }
 }
 
+bool MainWindow::loadEventsForAllAthletes()
+{
+    //Compile a list of strings to be the Y-Axis with Athlete Names
+    int currentProfileIndex = SelectProfileComboBox->currentIndex();
+    RunningProfile currentProfile = ProfileListing.at(currentProfileIndex);
+    QList<Athlete> profileAthletes = currentProfile.returnAllAthletes();
+    QStringList nameList;
+    int rowNumber = 0;
+    for (int i = 0; i < profileAthletes.size(); i++)
+    {
+        Athlete currentAthlete = profileAthletes.at(i);
+        rowNumber++;
+        nameList << currentAthlete.returnName();
+    }
+    EntriesTable ->setRowCount(rowNumber);
+    EntriesTable -> setVerticalHeaderLabels(nameList);
+    return true;
+}
+
+bool MainWindow::loadEventsForSelectedAthlete()
+{
+
+    return true;
+}
+
+//These functions open relevant windows
 void MainWindow::openProfileManager()
 {
     //Create a subwindow to access additional features retaining to the management of presaved profiles
