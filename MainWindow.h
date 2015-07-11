@@ -31,8 +31,11 @@ public slots:
 
 private:
     RunnerDatabase * TheDatabase;
+    RunningProfile CurrentProfile;
     QList<RunningProfile> ProfileListing;
     QList<QList<RunningEvent> > CurrentEventListing;
+    //Default String for usage in showing all athletes on the Athlete List
+    static const QString showAllAthleteString;
 };
 
 #endif // MainWindow_H

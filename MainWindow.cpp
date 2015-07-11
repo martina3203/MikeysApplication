@@ -1,5 +1,9 @@
 #include "MainWindow.h"
 
+
+const QString MainWindow::showAllAthleteString = "Show all Athletes";
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {   
@@ -16,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Update Profile Listing ComboBox and if there is a profile existing, load it.
     loadProfiles();
+    if (ProfileListing.size() != 0)
+    {
+        CurrentProfile = ProfileListing.at(0);
+    }
     loadAthletesFromProfile();
 
     //Build connections between buttons and list
@@ -27,24 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadEvents()));
     //Loads Events for display from prepared list
     connect(AthleteList,SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),this,SLOT(displayEventsForSelection()));
-}
-
-void MainWindow::loadEvents()
-{
-    return;
-}
-
-void MainWindow::displayEventsForSelection()
-{
-    int index = AthleteList->currentRow();
-    if (index == 0)
-    {
-        loadEventsForAllAthletes();
-    }
-    else
-    {
-        loadEventsForSelectedAthlete();
-    }
 }
 
 void MainWindow::loadProfiles()
@@ -70,13 +60,24 @@ bool MainWindow::loadAthletesFromProfile()
     if (newIndex != -1)
     {
         //Then repopulate
-        RunningProfile currentProfile = ProfileListing.at(newIndex);
-        QList<Athlete> profileAthleteList = currentProfile.returnAllAthletes();
+        CurrentProfile = ProfileListing.at(newIndex);
+        QList<Athlete> profileAthleteList = CurrentProfile.returnAllAthletes();
+        if (profileAthleteList.size() > 1)
+        {
+            //Add an item that will list all athlete results
+            AthleteList->addItem(showAllAthleteString);
+        }
         for (int i = 0; i < profileAthleteList.size(); i++)
         {
             Athlete currentAthlete = profileAthleteList.at(i);
             QString athleteName = currentAthlete.returnName();
             AthleteList->addItem(athleteName);
+        }
+        //Now let it default to the first item on the list and display
+        if (profileAthleteList.size() > 0)
+        {
+            AthleteList->setCurrentRow(0);
+            displayEventsForSelection();
         }
         return true;
     }
@@ -89,9 +90,7 @@ bool MainWindow::loadAthletesFromProfile()
 bool MainWindow::loadEventsForAllAthletes()
 {
     //Compile a list of strings to be the Y-Axis with Athlete Names
-    int currentProfileIndex = SelectProfileComboBox->currentIndex();
-    RunningProfile currentProfile = ProfileListing.at(currentProfileIndex);
-    QList<Athlete> profileAthletes = currentProfile.returnAllAthletes();
+    QList<Athlete> profileAthletes = CurrentProfile.returnAllAthletes();
     QStringList nameList;
     int rowNumber = 0;
     for (int i = 0; i < profileAthletes.size(); i++)
@@ -100,18 +99,62 @@ bool MainWindow::loadEventsForAllAthletes()
         rowNumber++;
         nameList << currentAthlete.returnName();
     }
-    EntriesTable ->setRowCount(rowNumber);
+    EntriesTable -> setRowCount(rowNumber);
     EntriesTable -> setVerticalHeaderLabels(nameList);
     return true;
 }
 
 bool MainWindow::loadEventsForSelectedAthlete()
 {
+    //This will only display the events corresponding to a single athlete that is selected
+    int index = AthleteList->currentRow();
+    QList<Athlete> profileAthletes = CurrentProfile.returnAllAthletes();
+    int athleteListSize = AthleteList->count();
+    if (athleteListSize > profileAthletes.size())
+    {
+        //This corrects the indexing if there is an option of "Show All"
+        index--;
+    }
+    Athlete currentAthlete = profileAthletes.at(index);
+    //It takes a list so I gave it a list of one
+    QStringList stringList;
+    stringList << currentAthlete.returnName();
+    EntriesTable -> setRowCount(1);
+    EntriesTable -> setVerticalHeaderLabels(stringList);
 
     return true;
 }
 
-//These functions open relevant windows
+//This will load all of the events into memory for usage
+void MainWindow::loadEvents()
+{
+    return;
+}
+
+//This will display the events as designated by the user
+void MainWindow::displayEventsForSelection()
+{
+    QListWidgetItem * index = AthleteList->currentItem();
+    QString currentText;
+    if (index != NULL)
+    {
+        currentText = index->text();
+    }
+    else
+    {
+        return;
+    }
+    if (currentText == showAllAthleteString)
+    {
+        loadEventsForAllAthletes();
+    }
+    else
+    {
+        loadEventsForSelectedAthlete();
+    }
+}
+
+//The following functions open relevant windows
 void MainWindow::openProfileManager()
 {
     //Create a subwindow to access additional features retaining to the management of presaved profiles
