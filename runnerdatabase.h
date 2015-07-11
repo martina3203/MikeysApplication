@@ -51,6 +51,7 @@ public:
     static const QString RUNNER_COLUMN;
     static const QString EVENT_TIME_COLUMN;
     static const QString EVENT_DATE_COLUMN;
+    static const QString EVENT_ORDER_COLUMN;
     static const QString ATHLETE_LIST_COLUMN;
     //This is a hard coded value of what format the date will be turned into a string
     static const QString DATE_FORMAT;

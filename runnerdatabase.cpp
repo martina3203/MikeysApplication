@@ -13,6 +13,7 @@ const QString RunnerDatabase::NAME_COLUMN = "NAME";
 const QString RunnerDatabase::RUNNER_COLUMN = "RUNNER_ID";
 const QString RunnerDatabase::EVENT_TIME_COLUMN = "EVENT_TIME";
 const QString RunnerDatabase::EVENT_DATE_COLUMN = "EVENT_DATE";
+const QString RunnerDatabase::EVENT_ORDER_COLUMN = "EVENT_ORDER";
 const QString RunnerDatabase::ATHLETE_LIST_COLUMN = "RUNNER_LIST";
 
 
@@ -55,7 +56,7 @@ RunnerDatabase::RunnerDatabase()
     if (!DefaultDatabase.tables().contains(EVENT_TABLE_NAME))
     {
         tableCreation = "CREATE TABLE " + EVENT_TABLE_NAME + " (" + ID_COLUMN + " integer PRIMARY KEY AUTOINCREMENT, " + NAME_COLUMN + " varchar(80), "
-                + RUNNER_COLUMN + " integer, " + EVENT_TIME_COLUMN + " varchar(30), " + EVENT_DATE_COLUMN + " varchar(25));";
+                + RUNNER_COLUMN + " integer, " + EVENT_TIME_COLUMN + " varchar(30), " + EVENT_DATE_COLUMN + " varchar(25), " + EVENT_ORDER_COLUMN + " integer);";
         if (!databaseQuery.exec(tableCreation))
         {
             qDebug() << "Failed to Create Event Table.";
@@ -435,12 +436,13 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     QString eventDate = newEvent.returnDate().toString(DATE_FORMAT);
     SQLString(eventDate);
     int athleteID = newEvent.returnAthleteID();
+    int eventOrder = newEvent.returnEventOrderNumber();
     //Must convert to be accepted within the command statement
     QString athleteIDString = QString::number(athleteID);
     //Now we create our insert statement
     command = "INSERT INTO " + EVENT_TABLE_NAME + " (" + NAME_COLUMN + ", " + EVENT_DATE_COLUMN + ", " +
-            EVENT_TIME_COLUMN + ", " + RUNNER_COLUMN + ") VALUES ('" + eventName + "', '" + eventDate +
-            "', '" + eventTime + "', " + athleteIDString + ");";
+            EVENT_TIME_COLUMN + ", " + RUNNER_COLUMN + ", " + EVENT_ORDER_COLUMN+") VALUES ('" + eventName + "', '" + eventDate +
+            "', '" + eventTime + "', " + athleteIDString + ", " + eventOrder + ");";
     //Execute
     if (!databaseQuery.exec(command))
     {
@@ -467,10 +469,11 @@ bool RunnerDatabase::updateEvent(RunningEvent theEvent)
     QString eventDate = theEvent.returnDate().toString(DATE_FORMAT);
     SQLString(eventDate);
     int athleteID = theEvent.returnAthleteID();
+    int eventOrder = theEvent.returnEventOrderNumber();
     QString athleteIDString = QString::number(athleteID);
     command = "UPDATE " + EVENT_TABLE_NAME + " SET " + NAME_COLUMN + " ='" + eventName + "', " +
             EVENT_TIME_COLUMN + "='" + eventTime + "', " + EVENT_DATE_COLUMN + " ='" + eventDate +
-            "'," + RUNNER_COLUMN + "=" + athleteIDString + " WHERE " + ID_COLUMN + "=" + eventIDString;
+            "'," + RUNNER_COLUMN + "=" + athleteIDString + ", " + EVENT_ORDER_COLUMN + "=" + eventOrder + " WHERE " + ID_COLUMN + "=" + eventIDString;
     if (!databaseQuery.exec(command))
     {
         qDebug() << "Failed to update Event " + eventName + " in Database.";
@@ -498,6 +501,7 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
             int ID = databaseQuery.value(0).toInt();
             QString eventName = databaseQuery.value(1).toString();
             int athleteID = databaseQuery.value(2).toInt();
+            int eventOrder = databaseQuery.value(5).toInt();
 
             //Acquire and convert time
             QString eventTimeString = databaseQuery.value(3).toString();
@@ -519,6 +523,7 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
             newEvent.setName(eventName);
             newEvent.setTime(eventTime);
             newEvent.setDate(eventDate);
+            newEvent.setEventOrderNumber(eventOrder);
             //Add to list
             eventList.push_back(newEvent);
         }

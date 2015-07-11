@@ -70,6 +70,8 @@ void MainWindow::openProfileManager()
     //Will wait til window is closed before proceeding
     ProfileWindow profileWindow(this,TheDatabase);
     profileWindow.exec();
+    //Then we update the profile list
+    loadProfiles();
 }
 
 void MainWindow::openWorkoutManager()

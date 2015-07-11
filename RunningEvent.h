@@ -16,18 +16,21 @@ class RunningEvent
         void setName(QString);
         void setTime(RunningTime);
         void setID(int);
+        void setEventOrderNumber(int);
         void setAthleteID(int);
         void setDate(QDate);
         QString returnEventName();
         RunningTime returnTime();
         int returnID();
         int returnAthleteID();
+        int returnEventOrderNumber();
         QDate returnDate();
     protected:
     private:
         QString EventName;
         int ID;
         int AthleteID;
+        int EventOrderNumber;
         RunningTime EventTime;
         QDate EventDate;
 };

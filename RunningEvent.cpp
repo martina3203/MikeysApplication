@@ -4,13 +4,14 @@ RunningEvent::RunningEvent()
 {
     EventName = "";
     AthleteID = 0;
-    ID = 0;
 }
 
 RunningEvent::RunningEvent(QString event, QString time)
 {
     EventName = event;
     EventTime = convertStringToTime(time);
+    ID = 0;
+    EventOrderNumber = 0;
 }
 
 
@@ -32,6 +33,11 @@ int RunningEvent::returnID()
 int RunningEvent::returnAthleteID()
 {
     return AthleteID;
+}
+
+int RunningEvent::returnEventOrderNumber()
+{
+    return EventOrderNumber;
 }
 
 QDate RunningEvent::returnDate()
@@ -57,6 +63,11 @@ void RunningEvent::setID(int newID)
 void RunningEvent::setAthleteID(int newAthleteID)
 {
     AthleteID = newAthleteID;
+}
+
+void RunningEvent::setEventOrderNumber(int newEventOrder)
+{
+    EventOrderNumber = newEventOrder;
 }
 
 void RunningEvent::setDate(QDate newDate)
