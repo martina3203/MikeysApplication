@@ -12,6 +12,9 @@ WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile se
     ProfileNameLabel->setText(selectedProfile.returnName());
     //Update label to show current date
     WorkoutDateLabel->setText(selectedDate.toString(RunnerDatabase::DATE_FORMAT));
+
+    //Form connections
+    connect(buttonBox,SIGNAL(accepted()),this,SLOT(AddWorkoutToDatabase()));
 }
 
 //Function combines current settings to create a workout entry in the database
@@ -29,7 +32,10 @@ void WorkoutWindow::AddWorkoutToDatabase()
         newEvent.setAthleteID(currentAthlete.returnID());
         newEvent.setDate(WorkoutDate);
         //Add to Database
-        TheDatabase->addEvent(newEvent);
+        if ((TheDatabase->addEvent(newEvent)) == 0)
+        {
+            qDebug() << "Failed to add event to Database in Workout Window.";
+        }
     }
 }
 

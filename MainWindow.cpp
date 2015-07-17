@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
     //Loads different events when the date is changed on a selected profile
     connect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(loadEvents()));
-
     //Loads Profile/Athletes and events on selection
     connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadAthletesAndEvents()));
     //Loads Events for display from prepared list
@@ -115,6 +114,7 @@ bool MainWindow::displayEventsForAllAthletes()
         eventList = CurrentEventListing.at(i);
         if (eventList.size() != 0)
         {
+            qDebug() << "Model for Workout found.";
             //use this list as a model for the athletes in this profile
             break;
         }
@@ -131,6 +131,10 @@ bool MainWindow::displayEventsForAllAthletes()
         }
         EntriesTable->setColumnCount(columnCount);
         EntriesTable->setHorizontalHeaderLabels(nameList);
+    }
+    else
+    {
+        qDebug() << "No events found.";
     }
     return true;
 }
@@ -198,6 +202,7 @@ void MainWindow::openProfileManager()
     profileWindow.exec();
     //Then we update the profile list
     loadProfiles();
+    loadAthletesAndEvents();
 }
 
 void MainWindow::openWorkoutManager()
@@ -211,6 +216,8 @@ void MainWindow::openWorkoutManager()
     //Open Workout window
     WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate);
     workoutWindow.exec();
+    //On return, reload the events
+    loadEvents();
 }
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)
