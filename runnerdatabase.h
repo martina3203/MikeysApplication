@@ -16,7 +16,6 @@ class RunnerDatabase
 public:
     RunnerDatabase();
     ~RunnerDatabase();
-
     //Test Function
     void test();
 
@@ -39,6 +38,7 @@ public:
 
     //Utility functions
     static QString convertAthleteListToString(QList<Athlete>);
+    QList<QList<RunningEvent> > findEventsForGivenAthletes(QList<Athlete>,QDate);
 
     //These are the default strings used for tables
     static const QString RUNNER_TABLE_NAME;
@@ -59,6 +59,7 @@ private:
     QSqlDatabase DefaultDatabase;
 };
 
+//Converts any QStrings to SQL friendly statements to be inserted
 void SQLString(QString&);
 
 #endif // RUNNERDATABASE_H

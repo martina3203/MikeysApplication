@@ -488,7 +488,6 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
     QSqlQuery databaseQuery;
     //Convert QDate to string
     QString dateString = theDate.toString(DATE_FORMAT);
-    qDebug() << dateString;
     QString command = "SELECT * FROM " + EVENT_TABLE_NAME + " WHERE (" + RUNNER_COLUMN + " = " + QString::number(athleteID) + " AND "
             + EVENT_DATE_COLUMN + " = '" + dateString + "');";
     if (databaseQuery.exec(command))
@@ -546,6 +545,24 @@ bool RunnerDatabase::removeEvent(int IDNumber)
     }
     return true;
 }
+
+//Finds Events for a given list of Athletes
+QList<QList<RunningEvent> > RunnerDatabase::findEventsForGivenAthletes(QList<Athlete> theAthletes, QDate givenDate)
+{
+    QList<QList<RunningEvent> > returnedList;
+    for (int i = 0; i < theAthletes.size(); i++)
+    {
+        Athlete currentAthlete = theAthletes.at(i);
+        int IDNumber = currentAthlete.returnID();
+        QList<RunningEvent> eventList = findEventsForDate(IDNumber,givenDate);
+        returnedList.append(eventList);
+    }
+    //The list has Event entries based on athlete
+    //Athlete[0] has it's entries in returnedList[0]
+    return returnedList;
+}
+
+
 
 //UTILITY FUNCTIONS FROM THIS POINT ON
 

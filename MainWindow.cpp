@@ -23,20 +23,22 @@ MainWindow::MainWindow(QWidget *parent) :
     if (ProfileListing.size() != 0)
     {
         CurrentProfile = ProfileListing.at(0);
+        loadAthletesAndEvents();
     }
-    loadAthletesFromProfile();
 
     //Build connections between buttons and list
     connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
     connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
-    //Loads Profile/Athletes on selection
-    connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadAthletesFromProfile()));
-    //Loads events corresponding to date and profile
-    connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadEvents()));
+    //Loads different events when the date is changed on a selected profile
+    connect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(loadEvents()));
+
+    //Loads Profile/Athletes and events on selection
+    connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadAthletesAndEvents()));
     //Loads Events for display from prepared list
     connect(AthleteList,SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),this,SLOT(displayEventsForSelection()));
 }
 
+//Loads profiles to viewed in the SelectProfileComboBox
 void MainWindow::loadProfiles()
 {
     //Load Profiles to Window list
@@ -50,7 +52,8 @@ void MainWindow::loadProfiles()
     }
 }
 
-bool MainWindow::loadAthletesFromProfile()
+//Loads Athletes to be viewed in the AthleteList
+void MainWindow::loadAthletes()
 {
     //Given a selected profile, we shall populate the list to include the Athlete Names
     qDebug() << "Selected Profile has been changed.";
@@ -77,22 +80,26 @@ bool MainWindow::loadAthletesFromProfile()
         if (profileAthleteList.size() > 0)
         {
             AthleteList->setCurrentRow(0);
-            displayEventsForSelection();
         }
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 
-bool MainWindow::loadEventsForAllAthletes()
+//Loads Athletes and their corresponding events
+void MainWindow::loadAthletesAndEvents()
+{
+    loadAthletes();
+    loadEvents();
+    displayEventsForSelection();
+}
+
+//Displays on the table the events for all athletes on a specified date.
+bool MainWindow::displayEventsForAllAthletes()
 {
     //Compile a list of strings to be the Y-Axis with Athlete Names
     QList<Athlete> profileAthletes = CurrentProfile.returnAllAthletes();
     QStringList nameList;
     int rowNumber = 0;
+    //Gather size of list along with athlete names
     for (int i = 0; i < profileAthletes.size(); i++)
     {
         Athlete currentAthlete = profileAthletes.at(i);
@@ -101,10 +108,35 @@ bool MainWindow::loadEventsForAllAthletes()
     }
     EntriesTable -> setRowCount(rowNumber);
     EntriesTable -> setVerticalHeaderLabels(nameList);
+    //Compile a list of events to be the X-Axis
+    QList<RunningEvent> eventList;
+    for (int i = 0; i < profileAthletes.size(); i++)
+    {
+        eventList = CurrentEventListing.at(i);
+        if (eventList.size() != 0)
+        {
+            //use this list as a model for the athletes in this profile
+            break;
+        }
+    }
+    if (eventList.size() != 0)
+    {
+        nameList.clear();
+        int columnCount = 0;
+        for (int i = 0; i < eventList.size(); i++)
+        {
+            RunningEvent currentEvent = eventList.at(i);
+            columnCount++;
+            nameList << currentEvent.returnEventName();
+        }
+        EntriesTable->setColumnCount(columnCount);
+        EntriesTable->setHorizontalHeaderLabels(nameList);
+    }
     return true;
 }
 
-bool MainWindow::loadEventsForSelectedAthlete()
+//Displays on the table the events for a specific athlete selected by the user on a specified date
+bool MainWindow::displayEventsForSelectedAthlete()
 {
     //This will only display the events corresponding to a single athlete that is selected
     int index = AthleteList->currentRow();
@@ -128,6 +160,9 @@ bool MainWindow::loadEventsForSelectedAthlete()
 //This will load all of the events into memory for usage
 void MainWindow::loadEvents()
 {
+    QDate selectedDate = DateEdit->date();
+    QList<Athlete> currentAthletes = CurrentProfile.returnAllAthletes();
+    CurrentEventListing = TheDatabase->findEventsForGivenAthletes(currentAthletes,selectedDate);
     return;
 }
 
@@ -146,15 +181,15 @@ void MainWindow::displayEventsForSelection()
     }
     if (currentText == showAllAthleteString)
     {
-        loadEventsForAllAthletes();
+        displayEventsForAllAthletes();
     }
     else
     {
-        loadEventsForSelectedAthlete();
+        displayEventsForSelectedAthlete();
     }
 }
 
-//The following functions open relevant windows
+//The following functions open/close relevant windows
 void MainWindow::openProfileManager()
 {
     //Create a subwindow to access additional features retaining to the management of presaved profiles

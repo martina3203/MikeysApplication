@@ -16,16 +16,16 @@ public:
     ~MainWindow();
     void loadProfiles();
     void loadAthleteEvents();
-    bool loadEventsForAllAthletes();
-    bool loadEventsForSelectedAthlete();
-
+    bool displayEventsForAllAthletes();
+    bool displayEventsForSelectedAthlete();
 signals:
 
 public slots:
+    void loadAthletes();
+    void loadEvents();
+    void loadAthletesAndEvents();
     void openProfileManager();
     void openWorkoutManager();
-    bool loadAthletesFromProfile();
-    void loadEvents();
     void displayEventsForSelection();
     void closeEvent(QCloseEvent*);
 
