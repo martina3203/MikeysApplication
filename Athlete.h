@@ -8,7 +8,8 @@
 
 
 #include <QString>
-#include <vector>
+#include <QList>
+#include "utility.h"
 
 /*
     Contains header for the Athlete class, which contains a name of the Athlete and a list of events they run.
@@ -30,5 +31,10 @@ class Athlete
         QString AthleteName;
         int ID;
 };
+
+//Sorts alphabetically
+void QuickSort(QList<Athlete>&,int,int);
+
+int QuickSortPartition(QList<Athlete>&,int,int);
 
 #endif // Athlete_H
