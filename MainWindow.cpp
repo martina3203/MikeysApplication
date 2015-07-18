@@ -114,11 +114,11 @@ bool MainWindow::displayEventsForAllAthletes()
         eventList = CurrentEventListing.at(i);
         if (eventList.size() != 0)
         {
-            qDebug() << "Model for Workout found.";
             //use this list as a model for the athletes in this profile
             break;
         }
     }
+        qDebug() << "Not loaded crash";
     if (eventList.size() != 0)
     {
         nameList.clear();
@@ -134,7 +134,7 @@ bool MainWindow::displayEventsForAllAthletes()
     }
     else
     {
-        qDebug() << "No events found.";
+        qDebug() << "No events found. Will not update Y-axis.";
     }
     return true;
 }
@@ -167,6 +167,14 @@ void MainWindow::loadEvents()
     QDate selectedDate = DateEdit->date();
     QList<Athlete> currentAthletes = CurrentProfile.returnAllAthletes();
     CurrentEventListing = TheDatabase->findEventsForGivenAthletes(currentAthletes,selectedDate);
+    if (CurrentEventListing.size() != currentAthletes.size())
+    {
+        for (int i = CurrentEventListing.size(); i < currentAthletes.size(); i++)
+        {
+            QList<RunningEvent> placeholderList;
+            CurrentEventListing.append(placeholderList);
+        }
+    }
     return;
 }
 
@@ -208,6 +216,7 @@ void MainWindow::openProfileManager()
     profileWindow.exec();
     //Then we update the profile list
     loadProfiles();
+    //And if possible, the Athlete list
     if (ProfileListing.size() != 0)
     {
         CurrentProfile = ProfileListing.at(0);
