@@ -175,6 +175,12 @@ void MainWindow::displayEventsForSelection()
 {
     QListWidgetItem * index = AthleteList->currentItem();
     QString currentText;
+
+    //Reset table
+    EntriesTable->clear();
+    EntriesTable->setRowCount(0);
+    EntriesTable->setColumnCount(0);
+
     if (index != NULL)
     {
         currentText = index->text();
