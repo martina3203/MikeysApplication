@@ -9,7 +9,7 @@
 #include "RunnerDatabase.h"
 #include "RunningProfile.h"
 
-class ProfileWindow : public QDialog,public Ui_ProfileDialog
+class ProfileWindow : public QDialog, public Ui_ProfileDialog
 {
     Q_OBJECT
 

@@ -9,11 +9,15 @@
 
 class WorkoutWindow : public QDialog, public Ui_WorkoutWindow
 {
+    Q_OBJECT
+
 public:
     WorkoutWindow(RunnerDatabase*,RunningProfile,QDate);
+    ~WorkoutWindow();
 
 public slots:
     void AddWorkoutToDatabase();
+
 private:
     RunningProfile CurrentProfile;
     RunnerDatabase * TheDatabase;

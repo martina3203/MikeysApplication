@@ -439,10 +439,11 @@ int RunnerDatabase::addEvent(RunningEvent &newEvent)
     int eventOrder = newEvent.returnEventOrderNumber();
     //Must convert to be accepted within the command statement
     QString athleteIDString = QString::number(athleteID);
+    QString eventOrderString = QString::number(eventOrder);
     //Now we create our insert statement
     command = "INSERT INTO " + EVENT_TABLE_NAME + " (" + NAME_COLUMN + ", " + EVENT_DATE_COLUMN + ", " +
-            EVENT_TIME_COLUMN + ", " + RUNNER_COLUMN + ", " + EVENT_ORDER_COLUMN+") VALUES ('" + eventName + "', '" + eventDate +
-            "', '" + eventTime + "', " + athleteIDString + ", " + eventOrder + ");";
+            EVENT_TIME_COLUMN + ", " + RUNNER_COLUMN + ", " + EVENT_ORDER_COLUMN + ") VALUES ('" + eventName + "', '" + eventDate +
+            "', '" + eventTime + "', " + athleteIDString + ", " + eventOrderString + ");";
     //Execute
     if (!databaseQuery.exec(command))
     {

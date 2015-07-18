@@ -202,7 +202,11 @@ void MainWindow::openProfileManager()
     profileWindow.exec();
     //Then we update the profile list
     loadProfiles();
-    loadAthletesAndEvents();
+    if (ProfileListing.size() != 0)
+    {
+        CurrentProfile = ProfileListing.at(0);
+        loadAthletesAndEvents();
+    }
 }
 
 void MainWindow::openWorkoutManager()
@@ -210,14 +214,21 @@ void MainWindow::openWorkoutManager()
     //Acquire the current profile selected
     RunningProfile currentProfile;
     int listPosition = SelectProfileComboBox->currentIndex();
-    currentProfile = ProfileListing.at(listPosition);
-    //Acquire selected date
-    QDate selectedDate = DateEdit->date();
-    //Open Workout window
-    WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate);
-    workoutWindow.exec();
-    //On return, reload the events
-    loadEvents();
+    if (listPosition != -1)
+    {
+        currentProfile = ProfileListing.at(listPosition);
+        //Acquire selected date
+        QDate selectedDate = DateEdit->date();
+        //Open Workout window
+        WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate);
+        workoutWindow.exec();
+        //On return, reload the events
+        loadEvents();
+    }
+    else
+    {
+        //Error Message
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)

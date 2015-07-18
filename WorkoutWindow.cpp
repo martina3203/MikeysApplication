@@ -39,3 +39,7 @@ void WorkoutWindow::AddWorkoutToDatabase()
     }
 }
 
+WorkoutWindow::~WorkoutWindow()
+{
+    //Destructor
+}
