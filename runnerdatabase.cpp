@@ -528,6 +528,8 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
             //Add to list
             eventList.push_back(newEvent);
         }
+        //Finally sort list
+        QuickSort(eventList,0,(eventList.size()-1));
     }
     else
     {

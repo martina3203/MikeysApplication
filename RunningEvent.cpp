@@ -79,3 +79,34 @@ RunningEvent::~RunningEvent()
 {
     //dtor
 }
+
+//Utility functions
+
+void QuickSort(QList<RunningEvent> &list,int start,int finish)
+{
+    if (start < finish)
+    {
+        int pivot = QuickSortPartition(list,start,finish);
+        QuickSort(list,start,pivot-1);
+        QuickSort(list,pivot+1,finish);
+    }
+}
+
+int QuickSortPartition(QList<RunningEvent> &list, int start, int finish)
+{
+    int divider = start;
+    RunningEvent pivotEvent = list.at(finish);
+    int pivotEventOrder = pivotEvent.returnEventOrderNumber();
+    for (int i = start; i < finish; i++)
+    {
+        RunningEvent currentEvent = list.at(i);
+        int currentEventOrder = currentEvent.returnEventOrderNumber();
+        if (currentEventOrder < pivotEventOrder)
+        {
+            list.swap(i,divider);
+            divider++;
+        }
+    }
+    list.swap(divider,finish);
+    return divider;
+}

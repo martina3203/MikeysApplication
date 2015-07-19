@@ -35,4 +35,9 @@ class RunningEvent
         QDate EventDate;
 };
 
+//Sorts events based on their event order
+void QuickSort(QList<RunningEvent>&,int,int);
+
+int QuickSortPartition(QList<RunningEvent>&,int,int);
+
 #endif // RunningEvent_H
