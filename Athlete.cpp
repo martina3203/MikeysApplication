@@ -60,25 +60,21 @@ void QuickSort(QList<Athlete> &list,int start,int finish)
 
 int QuickSortPartition(QList<Athlete> &list,int start,int finish)
 {
-    int index = ((start + finish)/2);
     //Swap index with last position
-    list.swap(index,(list.size()-1));
-    int pivot = start;
-    Athlete pivotAthlete = list.at(pivot);
+    int divider = start;
+    Athlete pivotAthlete = list.at(finish);
     QString pivotName = pivotAthlete.returnName();
     for (int i = start; i < finish; i++)
     {
         Athlete currentAthlete = list.at(i);
         QString currentName = currentAthlete.returnName();
-        if (AlphabeticallyFirst(pivotName,currentName))
+        if (!AlphabeticallyFirst(pivotName,currentName))
         {
-            list.swap(i,pivot);
-            pivot++;
-            pivotAthlete = list.at(pivot);
-            pivotName = pivotAthlete.returnName();
+            list.swap(i,divider);
+            divider++;
         }
     }
     //Final swap and return
-    list.swap(pivot,finish);
-    return pivot;
+    list.swap(divider,finish);
+    return divider;
 }

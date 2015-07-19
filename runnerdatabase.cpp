@@ -324,6 +324,7 @@ QList<Athlete> RunnerDatabase::findAthletes(QString IDList)
             buildString = "";
         }
     }
+    QuickSort(athleteList,0,athleteList.size()-1);
     return athleteList;
 }
 

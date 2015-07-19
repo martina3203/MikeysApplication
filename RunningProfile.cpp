@@ -81,7 +81,7 @@ Athlete RunningProfile::returnAthleteInformation(QString AthleteName)
 
 QList<Athlete> RunningProfile::returnAllAthletes()
 {
-    //QuickSort(ListOfAthletes,0,ListOfAthletes.size());
+    QuickSort(ListOfAthletes,0,(ListOfAthletes.size()-1));
     return ListOfAthletes;
 }
 

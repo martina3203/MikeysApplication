@@ -14,8 +14,6 @@ bool AlphabeticallyFirst(QString firstString,QString secondString)
             //Ensure that these are both letters
             if (firstStringCharacter.isLetter() && secondStringCharacter.isLetter())
             {
-                qDebug() << firstStringCharacter;
-                qDebug() << secondStringCharacter;
                 if ((secondStringCharacter < firstStringCharacter))
                 {
                     return false;
@@ -28,6 +26,8 @@ bool AlphabeticallyFirst(QString firstString,QString secondString)
             }
             else
             {
+                //If the first character is not, we will already be moving on
+                //Otherwise if the second is also not a letter, we will move on
                 if (!(secondStringCharacter.isLetter()))
                 {
                     j++;
@@ -37,6 +37,7 @@ bool AlphabeticallyFirst(QString firstString,QString secondString)
         }
         else
         {
+            //End of second string, so we must be done
             return true;
         }
     }
