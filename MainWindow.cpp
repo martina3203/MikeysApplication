@@ -109,7 +109,7 @@ bool MainWindow::displayEventsForAllAthletes()
     EntriesTable -> setVerticalHeaderLabels(nameList);
     //Compile a list of events to be the X-Axis
     QList<RunningEvent> eventList;
-    for (int i = 0; i < profileAthletes.size(); i++)
+    for (int i = 0; i < CurrentEventListing.size(); i++)
     {
         eventList = CurrentEventListing.at(i);
         if (eventList.size() != 0)
