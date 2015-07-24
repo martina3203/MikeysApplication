@@ -28,15 +28,21 @@ public slots:
     void openProfileManager();
     void openWorkoutManager();
     void displayEventsForSelection();
+    void toggleChangesMade();
+    void save();
     void closeEvent(QCloseEvent*);
 
 private:
     RunnerDatabase * TheDatabase;
     RunningProfile CurrentProfile;
+    //List that contains required materials
     QList<RunningProfile> ProfileListing;
     QList<QList<RunningEvent> > CurrentEventListing;
+    QStringList EventHeaderList;
     //Default String for usage in showing all athletes on the Athlete List
     static const QString showAllAthleteString;
+    //Boolean that determines if changes were made
+    bool ChangesMade;
 };
 
 #endif // MainWindow_H

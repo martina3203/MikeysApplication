@@ -1,13 +1,13 @@
 #include "MainWindow.h"
 
-
+//Default String used in the case of "Show All"
 const QString MainWindow::showAllAthleteString = "Show all Athletes";
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {   
     TheDatabase = NULL;
+    ChangesMade = false;
 
     //Setup designed UI
     setupUi(this);
@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadAthletesAndEvents()));
     //Loads Events for display from prepared list
     connect(AthleteList,SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),this,SLOT(displayEventsForSelection()));
+    //Determines if changes were made and saves them
+    connect(EntriesTable,SIGNAL(cellChanged(int,int)),this,SLOT(toggleChangesMade()));
+    connect(SaveChangesButton,SIGNAL(clicked(bool)),this,SLOT(save()));
 }
 
 //Loads profiles to viewed in the SelectProfileComboBox
@@ -120,16 +123,17 @@ bool MainWindow::displayEventsForAllAthletes()
     }
     if (eventList.size() != 0)
     {
-        nameList.clear();
+        //Sets up StringList for header names
+        EventHeaderList.clear();
         int columnCount = 0;
         for (int i = 0; i < eventList.size(); i++)
         {
             RunningEvent currentEvent = eventList.at(i);
             columnCount++;
-            nameList << currentEvent.returnEventName();
+            EventHeaderList << currentEvent.returnEventName();
         }
         EntriesTable->setColumnCount(columnCount);
-        EntriesTable->setHorizontalHeaderLabels(nameList);
+        EntriesTable->setHorizontalHeaderLabels(EventHeaderList);
 
         //Finally fill the table with the entires, if available
         fillTable();
@@ -212,22 +216,19 @@ void MainWindow::fillTable()
         QList<RunningEvent> currentAthleteEvents = CurrentEventListing.at(i);
         for (int j = 0; j < columnNumber; j++)
         {
+            QString QStringTime;
+            RunningTime eventTime;
             //If this event is listed and is in the right order
             if (j < currentAthleteEvents.size())
             {
                 RunningEvent currentEvent = currentAthleteEvents.at(j);
-                RunningTime eventTime = currentEvent.returnTime();
-                QString QStringTime = eventTime.toString();
-
-                //Create and Add entry to table
-                QTableWidgetItem * newTableItem = new QTableWidgetItem(QStringTime);
-                EntriesTable->setItem(i,j,newTableItem);
+                eventTime = currentEvent.returnTime();
             }
-            else
-            {
-                //Invent a new event
-
-            }
+            //Else it will default to a value of 0 which will still be displayed
+            //Create and add this entry to table
+            QStringTime = eventTime.toString();
+            QTableWidgetItem * newTableItem = new QTableWidgetItem(QStringTime);
+            EntriesTable->setItem(i,j,newTableItem);
         }
     }
 }
@@ -269,6 +270,23 @@ void MainWindow::openWorkoutManager()
     {
         //Error Message
     }
+}
+
+void MainWindow::save()
+{
+    if (ChangesMade == true)
+    {
+        qDebug() << "Commence Saving";
+        ChangesMade = false;
+        SaveChangesButton->setEnabled(false);
+    }
+}
+
+void MainWindow::toggleChangesMade()
+{
+    ChangesMade = true;
+    //Enable Save Button
+    SaveChangesButton->setEnabled(true);
 }
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)

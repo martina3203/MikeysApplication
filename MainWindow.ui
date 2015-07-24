@@ -191,6 +191,9 @@
      <layout class="QHBoxLayout" name="SelectedProfileAndEntriesHorizontal">
       <item>
        <widget class="QTabWidget" name="TimeViewTabs">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -216,6 +219,9 @@
          <bool>false</bool>
         </property>
         <widget class="QWidget" name="AthleteTab">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <attribute name="title">
           <string>Sort by Athletes</string>
          </attribute>
