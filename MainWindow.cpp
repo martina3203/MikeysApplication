@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(AthleteList,SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),this,SLOT(displayEventsForSelection()));
     //Determines if changes were made and saves them
     connect(EntriesTable,SIGNAL(cellChanged(int,int)),this,SLOT(toggleChangesMade()));
-    connect(SaveChangesButton,SIGNAL(clicked(bool)),this,SLOT(save()));
+    connect(SaveChangesButton,SIGNAL(clicked(bool)),this,SLOT(saveChangesToDatabase()));
 }
 
 //Loads profiles to viewed in the SelectProfileComboBox
@@ -272,7 +272,14 @@ void MainWindow::openWorkoutManager()
     }
 }
 
-void MainWindow::save()
+//Saves the table for the current viewing session but NOT in the database
+void MainWindow::saveCurrentTable()
+{
+
+}
+
+//Saves all the changes to the Database
+void MainWindow::saveChangesToDatabase()
 {
     if (ChangesMade == true)
     {

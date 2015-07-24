@@ -29,7 +29,8 @@ public slots:
     void openWorkoutManager();
     void displayEventsForSelection();
     void toggleChangesMade();
-    void save();
+    void saveCurrentTable();
+    void saveChangesToDatabase();
     void closeEvent(QCloseEvent*);
 
 private:
