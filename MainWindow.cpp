@@ -118,7 +118,6 @@ bool MainWindow::displayEventsForAllAthletes()
             break;
         }
     }
-        qDebug() << "Not loaded crash";
     if (eventList.size() != 0)
     {
         nameList.clear();
@@ -131,6 +130,9 @@ bool MainWindow::displayEventsForAllAthletes()
         }
         EntriesTable->setColumnCount(columnCount);
         EntriesTable->setHorizontalHeaderLabels(nameList);
+
+        //Finally fill the table with the entires, if available
+        fillTable();
     }
     else
     {
@@ -167,14 +169,6 @@ void MainWindow::loadEvents()
     QDate selectedDate = DateEdit->date();
     QList<Athlete> currentAthletes = CurrentProfile.returnAllAthletes();
     CurrentEventListing = TheDatabase->findEventsForGivenAthletes(currentAthletes,selectedDate);
-    if (CurrentEventListing.size() != currentAthletes.size())
-    {
-        for (int i = CurrentEventListing.size(); i < currentAthletes.size(); i++)
-        {
-            QList<RunningEvent> placeholderList;
-            CurrentEventListing.append(placeholderList);
-        }
-    }
     return;
 }
 
@@ -204,6 +198,37 @@ void MainWindow::displayEventsForSelection()
     else
     {
         displayEventsForSelectedAthlete();
+    }
+}
+
+//Fills table with known entires from loaded event list and athletes
+void MainWindow::fillTable()
+{
+    int columnNumber = EntriesTable->columnCount();
+    //For each Athlete and their list
+    for (int i = 0; i < CurrentEventListing.size(); i++)
+    {
+        //Load current list and populate every field for this athlete with some type of value
+        QList<RunningEvent> currentAthleteEvents = CurrentEventListing.at(i);
+        for (int j = 0; j < columnNumber; j++)
+        {
+            //If this event is listed and is in the right order
+            if (j < currentAthleteEvents.size())
+            {
+                RunningEvent currentEvent = currentAthleteEvents.at(j);
+                RunningTime eventTime = currentEvent.returnTime();
+                QString QStringTime = eventTime.toString();
+
+                //Create and Add entry to table
+                QTableWidgetItem * newTableItem = new QTableWidgetItem(QStringTime);
+                EntriesTable->setItem(i,j,newTableItem);
+            }
+            else
+            {
+                //Invent a new event
+
+            }
+        }
     }
 }
 

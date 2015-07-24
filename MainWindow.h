@@ -18,6 +18,7 @@ public:
     void loadAthleteEvents();
     bool displayEventsForAllAthletes();
     bool displayEventsForSelectedAthlete();
+    void fillTable();
 signals:
 
 public slots:
