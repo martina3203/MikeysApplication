@@ -91,11 +91,11 @@ void MainWindow::loadAthletesAndEvents()
 {
     loadAthletes();
     loadEvents();
+    setupRowAndColumnHeaders();
     displayEventsForSelection();
 }
 
-//Displays on the table the events for all athletes on a specified date.
-bool MainWindow::displayEventsForAllAthletes()
+void MainWindow::setupRowAndColumnHeaders()
 {
     //Compile a list of strings to be the Y-Axis with Athlete Names
     QList<Athlete> profileAthletes = CurrentProfile.returnAllAthletes();
@@ -134,13 +134,17 @@ bool MainWindow::displayEventsForAllAthletes()
         }
         EntriesTable->setColumnCount(columnCount);
         EntriesTable->setHorizontalHeaderLabels(EventHeaderList);
-
-        //Finally fill the table with the entires, if available
-        fillTable();
     }
-    else
+}
+
+
+//Displays on the table the events for all athletes on a specified date.
+bool MainWindow::displayEventsForAllAthletes()
+{
+    int rows = EntriesTable->rowCount();
+    for (int i = 0; i < rows; i++)
     {
-        qDebug() << "No events found. Will not update Y-axis.";
+        EntriesTable->showRow(i);
     }
     return true;
 }
@@ -148,22 +152,28 @@ bool MainWindow::displayEventsForAllAthletes()
 //Displays on the table the events for a specific athlete selected by the user on a specified date
 bool MainWindow::displayEventsForSelectedAthlete()
 {
-    //This will only display the events corresponding to a single athlete that is selected
-    int index = AthleteList->currentRow();
-    QList<Athlete> profileAthletes = CurrentProfile.returnAllAthletes();
     int athleteListSize = AthleteList->count();
-    if (athleteListSize > profileAthletes.size())
+    int rowCount = EntriesTable->rowCount();
+    //If the profile has more than one athlete
+    if (athleteListSize > 1)
     {
-        //This corrects the indexing if there is an option of "Show All"
-        index--;
+        //The reason to subtract 1 is to account for the case of "Show All Athletes"
+        //When compared to the actual AthleteList
+        int AthleteListIndex = (AthleteList->currentRow())-1;
+        //We are now going to hide all of the other athletes from view
+        for (int i = 0; i < rowCount; i++)
+        {
+            //Hide it if it's not the selected item
+            if (i != AthleteListIndex)
+            {
+                EntriesTable->hideRow(i);
+            }
+            else
+            {
+                EntriesTable->showRow(i);
+            }
+        }
     }
-    Athlete currentAthlete = profileAthletes.at(index);
-    //It takes a list so I gave it a list of one
-    QStringList stringList;
-    stringList << currentAthlete.returnName();
-    EntriesTable -> setRowCount(1);
-    EntriesTable -> setVerticalHeaderLabels(stringList);
-
     return true;
 }
 
@@ -181,12 +191,6 @@ void MainWindow::displayEventsForSelection()
 {
     QListWidgetItem * index = AthleteList->currentItem();
     QString currentText;
-
-    //Reset table
-    EntriesTable->clear();
-    EntriesTable->setRowCount(0);
-    EntriesTable->setColumnCount(0);
-
     if (index != NULL)
     {
         currentText = index->text();

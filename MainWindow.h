@@ -16,6 +16,7 @@ public:
     ~MainWindow();
     void loadProfiles();
     void loadAthleteEvents();
+    void setupRowAndColumnHeaders();
     bool displayEventsForAllAthletes();
     bool displayEventsForSelectedAthlete();
     void fillTable();
