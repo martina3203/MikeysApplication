@@ -15,7 +15,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void loadProfiles();
-    void loadAthleteEvents();
+    void loadAthletes();
+    void loadEvents();
     void setupRowAndColumnHeaders();
     bool displayEventsForAllAthletes();
     bool displayEventsForSelectedAthlete();
@@ -23,14 +24,12 @@ public:
 signals:
 
 public slots:
-    void loadAthletes();
-    void loadEvents();
-    void loadAthletesAndEvents();
+    void profileChange();
+    void dateChange();
     void openProfileManager();
     void openWorkoutManager();
     void displayEventsForSelection();
     void toggleChangesMade();
-    void saveCurrentTable();
     void saveChangesToDatabase();
     void closeEvent(QCloseEvent*);
 

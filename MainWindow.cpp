@@ -23,21 +23,43 @@ MainWindow::MainWindow(QWidget *parent) :
     if (ProfileListing.size() != 0)
     {
         CurrentProfile = ProfileListing.at(0);
-        loadAthletesAndEvents();
+        profileChange();
     }
 
     //Build connections between buttons and list
     connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
     connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
     //Loads different events when the date is changed on a selected profile
-    connect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(loadEvents()));
+    connect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(dateChange()));
     //Loads Profile/Athletes and events on selection
-    connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(loadAthletesAndEvents()));
+    connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(profileChange()));
     //Loads Events for display from prepared list
     connect(AthleteList,SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),this,SLOT(displayEventsForSelection()));
     //Determines if changes were made and saves them
     connect(EntriesTable,SIGNAL(cellChanged(int,int)),this,SLOT(toggleChangesMade()));
     connect(SaveChangesButton,SIGNAL(clicked(bool)),this,SLOT(saveChangesToDatabase()));
+}
+
+//Called to load all relevant information involved with a new profle
+void MainWindow::profileChange()
+{
+    loadAthletes();
+    loadEvents();
+    setupRowAndColumnHeaders();
+    displayEventsForSelection();
+}
+
+//Called to load all relevant information involved with a new date
+void MainWindow::dateChange()
+{
+    //First we will reset the table
+    EntriesTable->clear();
+    EntriesTable->setRowCount(0);
+    EntriesTable->setColumnCount(0);
+    //Then we shall reload all the necessary information
+    loadEvents();
+    setupRowAndColumnHeaders();
+    displayEventsForSelection();
 }
 
 //Loads profiles to viewed in the SelectProfileComboBox
@@ -86,15 +108,7 @@ void MainWindow::loadAthletes()
     }
 }
 
-//Loads Athletes and their corresponding events
-void MainWindow::loadAthletesAndEvents()
-{
-    loadAthletes();
-    loadEvents();
-    setupRowAndColumnHeaders();
-    displayEventsForSelection();
-}
-
+//Sets up the column and row titles
 void MainWindow::setupRowAndColumnHeaders()
 {
     //Compile a list of strings to be the Y-Axis with Athlete Names
@@ -137,6 +151,37 @@ void MainWindow::setupRowAndColumnHeaders()
     }
 }
 
+//This will load all of the events into memory for usage
+void MainWindow::loadEvents()
+{
+    QDate selectedDate = DateEdit->date();
+    QList<Athlete> currentAthletes = CurrentProfile.returnAllAthletes();
+    CurrentEventListing = TheDatabase->findEventsForGivenAthletes(currentAthletes,selectedDate);
+    return;
+}
+
+//This will display the events as designated by the user
+void MainWindow::displayEventsForSelection()
+{
+    QListWidgetItem * index = AthleteList->currentItem();
+    QString currentText;
+    if (index != NULL)
+    {
+        currentText = index->text();
+    }
+    else
+    {
+        return;
+    }
+    if (currentText == showAllAthleteString)
+    {
+        displayEventsForAllAthletes();
+    }
+    else
+    {
+        displayEventsForSelectedAthlete();
+    }
+}
 
 //Displays on the table the events for all athletes on a specified date.
 bool MainWindow::displayEventsForAllAthletes()
@@ -175,38 +220,6 @@ bool MainWindow::displayEventsForSelectedAthlete()
         }
     }
     return true;
-}
-
-//This will load all of the events into memory for usage
-void MainWindow::loadEvents()
-{
-    QDate selectedDate = DateEdit->date();
-    QList<Athlete> currentAthletes = CurrentProfile.returnAllAthletes();
-    CurrentEventListing = TheDatabase->findEventsForGivenAthletes(currentAthletes,selectedDate);
-    return;
-}
-
-//This will display the events as designated by the user
-void MainWindow::displayEventsForSelection()
-{
-    QListWidgetItem * index = AthleteList->currentItem();
-    QString currentText;
-    if (index != NULL)
-    {
-        currentText = index->text();
-    }
-    else
-    {
-        return;
-    }
-    if (currentText == showAllAthleteString)
-    {
-        displayEventsForAllAthletes();
-    }
-    else
-    {
-        displayEventsForSelectedAthlete();
-    }
 }
 
 //Fills table with known entires from loaded event list and athletes
@@ -250,7 +263,14 @@ void MainWindow::openProfileManager()
     if (ProfileListing.size() != 0)
     {
         CurrentProfile = ProfileListing.at(0);
-        loadAthletesAndEvents();
+        profileChange();
+    }
+    else
+    {
+        //Else we will simply clear the table
+        EntriesTable->clear();
+        EntriesTable->setRowCount(0);
+        EntriesTable->setColumnCount(0);
     }
 }
 
@@ -267,19 +287,15 @@ void MainWindow::openWorkoutManager()
         //Open Workout window
         WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate);
         workoutWindow.exec();
-        //On return, reload the events
+        //On return, reload the events and the table
         loadEvents();
+        setupRowAndColumnHeaders();
+        displayEventsForSelection();
     }
     else
     {
         //Error Message
     }
-}
-
-//Saves the table for the current viewing session but NOT in the database
-void MainWindow::saveCurrentTable()
-{
-
 }
 
 //Saves all the changes to the Database
