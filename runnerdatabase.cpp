@@ -473,9 +473,10 @@ bool RunnerDatabase::updateEvent(RunningEvent theEvent)
     int athleteID = theEvent.returnAthleteID();
     int eventOrder = theEvent.returnEventOrderNumber();
     QString athleteIDString = QString::number(athleteID);
+    QString eventOrderString = QString::number(eventOrder);
     command = "UPDATE " + EVENT_TABLE_NAME + " SET " + NAME_COLUMN + " ='" + eventName + "', " +
             EVENT_TIME_COLUMN + "='" + eventTime + "', " + EVENT_DATE_COLUMN + " ='" + eventDate +
-            "'," + RUNNER_COLUMN + "=" + athleteIDString + ", " + EVENT_ORDER_COLUMN + "=" + eventOrder + " WHERE " + ID_COLUMN + "=" + eventIDString;
+            "'," + RUNNER_COLUMN + "=" + athleteIDString + ", " + EVENT_ORDER_COLUMN + "=" + eventOrderString + " WHERE " + ID_COLUMN + "=" + eventIDString;
     if (!databaseQuery.exec(command))
     {
         qDebug() << "Failed to update Event " + eventName + " in Database.";

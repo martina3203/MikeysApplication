@@ -46,19 +46,17 @@ void MainWindow::profileChange()
     loadAthletes();
     loadEvents();
     setupRowAndColumnHeaders();
+    fillTable();
     displayEventsForSelection();
 }
 
 //Called to load all relevant information involved with a new date
 void MainWindow::dateChange()
 {
-    //First we will reset the table
-    EntriesTable->clear();
-    EntriesTable->setRowCount(0);
-    EntriesTable->setColumnCount(0);
     //Then we shall reload all the necessary information
     loadEvents();
     setupRowAndColumnHeaders();
+    fillTable();
     displayEventsForSelection();
 }
 
@@ -111,6 +109,11 @@ void MainWindow::loadAthletes()
 //Sets up the column and row titles
 void MainWindow::setupRowAndColumnHeaders()
 {
+    //Reset the table
+    EntriesTable->clear();
+    EntriesTable->setRowCount(0);
+    EntriesTable->setColumnCount(0);
+
     //Compile a list of strings to be the Y-Axis with Athlete Names
     QList<Athlete> profileAthletes = CurrentProfile.returnAllAthletes();
     QStringList nameList;
@@ -290,6 +293,7 @@ void MainWindow::openWorkoutManager()
         //On return, reload the events and the table
         loadEvents();
         setupRowAndColumnHeaders();
+        fillTable();
         displayEventsForSelection();
     }
     else
@@ -304,6 +308,65 @@ void MainWindow::saveChangesToDatabase()
     if (ChangesMade == true)
     {
         qDebug() << "Commence Saving";
+        QList<Athlete> athleteList = CurrentProfile.returnAllAthletes();
+        QDate workoutDate = DateEdit->date();
+        int columns = EntriesTable->columnCount();
+        int rows = athleteList.size();
+        //Save every entry in the table
+        for (int i = 0; i < rows; i++)
+        {
+            Athlete currentAthlete = athleteList.at(i);
+            QList<RunningEvent> workoutList = CurrentEventListing.at(i);
+            //Construct a new list to be added to the database
+            if (workoutList.size() == 0)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    //Create a new event and add it to the list
+                    RunningEvent newEvent;
+                    newEvent.setAthleteID(currentAthlete.returnID());
+                    newEvent.setDate(workoutDate);
+                    newEvent.setEventOrderNumber(j);
+                    newEvent.setName(EventHeaderList.at(j));
+                    QTableWidgetItem * currentCell = EntriesTable->item(i,j);
+                    QString eventTimeString = currentCell->text();
+                    RunningTime eventTime = convertStringToTime(eventTimeString);
+                    newEvent.setTime(eventTime);
+                    if (!(TheDatabase->addEvent(newEvent)))
+                    {
+                        qDebug() << "You done messed up, A-A-Ron";
+                    }
+                    else
+                    {
+                        workoutList.append(newEvent);
+                    }
+                }
+            }
+            //Update the preexisting list
+            else
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    RunningEvent currentEvent = workoutList.at(j);
+                    QTableWidgetItem * currentCell = EntriesTable->item(i,j);
+                    QString eventTimeString = currentCell->text();
+                    RunningTime eventTime = convertStringToTime(eventTimeString);
+                    currentEvent.setTime(eventTime);
+                    if (!(TheDatabase->updateEvent(currentEvent)))
+                    {
+                        qDebug() << "You done messed up, A-A-Ron";
+                    }
+                    else
+                    {
+                        workoutList.replace(j,currentEvent);
+                    }
+                }
+            }
+            //Update changes to the list
+            CurrentEventListing.replace(i,workoutList);
+        }
+
+        //Reset save flag
         ChangesMade = false;
         SaveChangesButton->setEnabled(false);
     }

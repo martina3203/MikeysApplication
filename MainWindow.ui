@@ -309,11 +309,6 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="EventTab">
-         <attribute name="title">
-          <string>Sort by Events</string>
-         </attribute>
-        </widget>
        </widget>
       </item>
      </layout>
