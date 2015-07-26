@@ -16,6 +16,7 @@ class RunningTime
 {
     public:
         RunningTime();
+        RunningTime(QString);
         int testFunction();
         virtual ~RunningTime();
         void setMiliseconds(int);

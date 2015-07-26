@@ -13,6 +13,98 @@ RunningTime::RunningTime()
     Hours = 0;
 }
 
+RunningTime::RunningTime(QString timeString)
+{
+    //Set defaults
+    Miliseconds = 0;
+    Seconds = 0;
+    Minutes = 0;
+    Hours = 0;
+    //Time shall be given in a format where it contains all 00:00:00.0 or some of these components
+    //This function will parse through the strings and study the format for it and construct a RunningTime object
+    //that contains the given information
+    //Information is gathered in segments between each of the different punctation marks
+    RunningTime convertedTime;
+    QString timeSegment;
+    int colonCounter = 0;
+    bool periodFound = false;
+    //First we parse to see how many colons and periods there are
+    for (int i = 0; i < timeString.size(); i++)
+    {
+        if (timeString.at(i) == ':')
+        {
+            colonCounter++;
+        }
+        else if (timeString.at(i) == '.')
+        {
+            periodFound = true;
+        }
+    }
+    int currentPosition = 0;
+    int convertedNumber = 0;
+    //Dealing with a time in Hours
+    if (colonCounter == 2)
+    {
+        timeSegment = "";
+        //Acquires Hour Position
+        while (timeString.at(currentPosition) != ':')
+        {
+            timeSegment = timeSegment + timeString.at(currentPosition);
+            currentPosition++;
+        }
+        convertedNumber = timeSegment.toInt();
+        Hours = convertedNumber;
+        convertedNumber = 0;
+        //Move to next position
+        currentPosition++;
+    }
+    //Now the Minutes position
+    if (colonCounter >= 1)
+    {
+        timeSegment = "";
+        while (timeString.at(currentPosition) != ':')
+        {
+            timeSegment = timeSegment + timeString.at(currentPosition);
+            currentPosition++;
+        }
+        convertedNumber = timeSegment.toInt();
+        Minutes = convertedNumber;
+        convertedNumber = 0;
+        //Move to next position
+        currentPosition++;
+    }
+    if (colonCounter >= 0)
+    {
+        timeSegment = "";
+        while ((timeString.at(currentPosition) != '.') && (currentPosition < (timeString.size()-1)))
+        {
+            timeSegment = timeSegment + timeString.at(currentPosition);
+            currentPosition++;
+        }
+        if ((currentPosition == (timeString.size()-1)) && (timeString.at(currentPosition) != '.'))
+        {
+            timeSegment = timeSegment + timeString.at(currentPosition);
+        }
+        convertedNumber = timeSegment.toInt();
+        Seconds = convertedNumber;
+        convertedNumber = 0;
+        //Move to next position, if one should exist
+        currentPosition++;
+    }
+    //We may have a significant milisecond value
+    if (periodFound == true)
+    {
+        timeSegment = "";
+        for (int i = currentPosition; i < timeString.size(); i++)
+        {
+            timeSegment = timeSegment + timeString.at(i);
+        }
+        convertedNumber = timeSegment.toInt();
+        Miliseconds = convertedNumber;
+    }
+    //Otherwise it remains zero, by default
+}
+
 RunningTime::~RunningTime()
 {
     //Destructor
@@ -365,6 +457,10 @@ RunningTime convertStringToTime(QString timeString)
         {
             timeSegment = timeSegment + timeString.at(currentPosition);
             currentPosition++;
+        }
+        if ((currentPosition == (timeString.size()-1)) && (timeString.at(currentPosition) != '.'))
+        {
+            timeSegment = timeSegment + timeString.at(currentPosition);
         }
         convertedNumber = timeSegment.toInt();
         convertedTime.setSeconds(convertedNumber);

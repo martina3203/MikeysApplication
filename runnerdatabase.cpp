@@ -193,7 +193,7 @@ void RunnerDatabase::test()
     testDate.setDate(1993,5,3);
     QString theDate = testDate.toString(DATE_FORMAT);
     qDebug() << theDate;
-    RunningTime newTime = convertStringToTime("4:46.3");
+    RunningTime newTime("4:46.3");
     testEvent.setTime(newTime);
     testEvent.setName("400 Meter Dash");
     testEvent.setAthleteID(6);
@@ -507,7 +507,7 @@ QList<RunningEvent> RunnerDatabase::findEventsForDate(int athleteID, QDate theDa
 
             //Acquire and convert time
             QString eventTimeString = databaseQuery.value(3).toString();
-            RunningTime eventTime = convertStringToTime(eventTimeString);
+            RunningTime eventTime(eventTimeString);
 
             //Acquire and convert date
             //Date is in the format of 'MM.DD.YYYY'
