@@ -48,9 +48,22 @@
          <item>
           <layout class="QHBoxLayout" name="ListButtonLayout">
            <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QPushButton" name="DeleteButton">
              <property name="text">
-              <string>PushButton</string>
+              <string>Delete Selected Event</string>
              </property>
             </widget>
            </item>
@@ -61,42 +74,132 @@
        <item>
         <layout class="QVBoxLayout" name="WorkoutOptionLayout">
          <item>
-          <widget class="QLabel" name="CurrentProfileLabel">
-           <property name="text">
-            <string>Profile Name:</string>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-          </widget>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="ProfileNameLabel">
-           <property name="text">
-            <string>PROFILE NAME</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="CurrentProfileLabel">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Profile Name:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="ProfileNameLabel">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>PROFILE NAME</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="CurrentDateLabel">
-           <property name="text">
-            <string>Current Date:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="WorkoutDateLabel">
-           <property name="text">
-            <string>DATE</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="CurrentDateLabel">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Current Date:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="WorkoutDateLabel">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>DATE</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QLabel" name="EventNameLabel">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>New Workout Name:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="EventNameLineEdit"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLineEdit" name="EventNameLineEdit">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="AddButton">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Add Button</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
