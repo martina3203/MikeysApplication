@@ -49,6 +49,7 @@ void WorkoutWindow::findModelWorkout()
 {
     //We will parse through the current event list and find a workout that will serve for all athletes
     //If one should exist
+    
 }
 
 //Updates list viewable to user

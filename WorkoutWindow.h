@@ -12,16 +12,21 @@ class WorkoutWindow : public QDialog, public Ui_WorkoutWindow
     Q_OBJECT
 
 public:
-    WorkoutWindow(RunnerDatabase*,RunningProfile,QDate);
+    WorkoutWindow(RunnerDatabase*,RunningProfile,QDate,QList< QList<RunningEvent> >);
+    void findModelWorkout();
     ~WorkoutWindow();
 
 public slots:
-    void AddWorkoutToDatabase();
+    void AddWorkout();
+    void UpdateWorkoutList();
+    void SaveChangesToDatabase();
 
 private:
     RunningProfile CurrentProfile;
     RunnerDatabase * TheDatabase;
     QDate WorkoutDate;
+    QList< QList<RunningEvent> > LoadedEvents;
+    QList<RunningEvent> EventsToBeRemoved;
 };
 
 #endif // WORKOUTWINDOW_H

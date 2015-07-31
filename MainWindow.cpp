@@ -288,7 +288,7 @@ void MainWindow::openWorkoutManager()
         //Acquire selected date
         QDate selectedDate = DateEdit->date();
         //Open Workout window
-        WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate);
+        WorkoutWindow workoutWindow(TheDatabase,currentProfile,selectedDate,CurrentEventListing);
         workoutWindow.exec();
         //On return, reload the events and the table
         loadEvents();
