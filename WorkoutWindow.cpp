@@ -15,6 +15,11 @@ WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile se
     //Update label to show current date
     WorkoutDateLabel->setText(selectedDate.toString(RunnerDatabase::DATE_FORMAT));
 
+    //Find the model workout to be displayed
+    findModelWorkout();
+    UpdateWorkoutList();
+
+
     //Form connections
     connect(AddButton,SIGNAL(clicked()),this,SLOT(AddWorkout()));
     connect(buttonBox,SIGNAL(accepted()),this,SLOT(SaveChangesToDatabase()));
@@ -36,7 +41,6 @@ void WorkoutWindow::AddWorkout()
     {
         Athlete currentAthlete = athleteList.at(i);
         QList<RunningEvent> athleteEvents = LoadedEvents.at(i);
-        RunningEvent newEvent;
         newEvent.setAthleteID(currentAthlete.returnID());
         newEvent.setEventOrderNumber(athleteEvents.size());
         athleteEvents.append(newEvent);
@@ -49,18 +53,74 @@ void WorkoutWindow::findModelWorkout()
 {
     //We will parse through the current event list and find a workout that will serve for all athletes
     //If one should exist
+    QList<RunningEvent> modelWorkoutList;
+    for (int i = 0; i < LoadedEvents.size(); i++)
+    {
+        modelWorkoutList = LoadedEvents.at(i);
+        if (modelWorkoutList.size() != 0)
+        {
+            //This is the model list
+            break;
+        }
+    }
+    if (modelWorkoutList.size() == 0)
+    {
+        //Nothing to do here so break
+        return;
+    }
+    //We are gonna populate every entry with this list if they should need it
+    QList<Athlete> athleteList = CurrentProfile.returnAllAthletes();
+    for (int i = 0; i < athleteList.size(); i++)
+    {
+        Athlete currentAthlete = athleteList.at(i);
+        int athleteID = currentAthlete.returnID();
+        QList<RunningEvent> athleteEvents = LoadedEvents.at(i);
+        if (athleteEvents.size() == 0)
+        {
+            //Make a new list and update it accordingly in the main container list
+            for (int j = 0; j < modelWorkoutList.size(); j++)
+            {
+                RunningEvent currentEvent = modelWorkoutList.at(j);
+                currentEvent.setAthleteID(athleteID);
+                RunningTime defaultTime;
+                currentEvent.setTime(defaultTime);
+                modelWorkoutList.replace(j,currentEvent);
+            }
+            //Update it's list
+            LoadedEvents.replace(i,modelWorkoutList);
+        }
+    }
 }
 
 //Updates list viewable to user
 void WorkoutWindow::UpdateWorkoutList()
 {
-
+    //Clear list
+    WorkoutList->clear();
+    QList<RunningEvent> modelWorkoutList;
+    for (int i = 0; i < LoadedEvents.size(); i++)
+    {
+        modelWorkoutList = LoadedEvents.at(i);
+        if (modelWorkoutList.size() != 0)
+        {
+            //This is the model list
+            break;
+        }
+    }
+    //Update list to show the workout
+    for (int i = 0; i < modelWorkoutList.size(); i++)
+    {
+        RunningEvent currentEvent = modelWorkoutList.at(i);
+        QString eventName = currentEvent.returnEventName();
+        WorkoutList->addItem(eventName);
+    }
 }
 
 //Carries out changes to database
 void WorkoutWindow::SaveChangesToDatabase()
 {
     //Save all of the events that are available
+    qDebug() << "Saving in Workout Window";
     for (int i = 0; i < LoadedEvents.size(); i++)
     {
         QList<RunningEvent> currentAthleteEvents = LoadedEvents.at(i);
@@ -100,6 +160,7 @@ void WorkoutWindow::SaveChangesToDatabase()
             }
         }
     }
+    close();
 }
 
 WorkoutWindow::~WorkoutWindow()
