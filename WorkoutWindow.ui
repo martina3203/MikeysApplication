@@ -48,6 +48,20 @@
          <item>
           <layout class="QHBoxLayout" name="ListButtonLayout">
            <item>
+            <widget class="QPushButton" name="UpButton">
+             <property name="text">
+              <string>UP</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="DownButton">
+             <property name="text">
+              <string>DOWN</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -182,7 +196,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Add Button</string>
+              <string>Add Event</string>
              </property>
             </widget>
            </item>

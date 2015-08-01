@@ -19,11 +19,13 @@ WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile se
     findModelWorkout();
     UpdateWorkoutList();
 
-
     //Form connections
     connect(AddButton,SIGNAL(clicked()),this,SLOT(AddWorkout()));
     connect(buttonBox,SIGNAL(accepted()),this,SLOT(SaveChangesToDatabase()));
     connect(buttonBox,SIGNAL(rejected()),this,SLOT(close()));
+    //Up and Down buttons
+    connect(UpButton,SIGNAL(clicked(bool)),this,SLOT(ShiftListUp()));
+    connect(DownButton,SIGNAL(clicked(bool)),this,SLOT(ShiftListDown()));
 }
 
 //Adds a workout to every athletes list
@@ -52,6 +54,7 @@ void WorkoutWindow::AddWorkout()
     UpdateWorkoutList();
 }
 
+//Finds a workout that is listed for this group on this day
 void WorkoutWindow::findModelWorkout()
 {
     //We will parse through the current event list and find a workout that will serve for all athletes
@@ -94,6 +97,58 @@ void WorkoutWindow::findModelWorkout()
             //Update it's list
             LoadedEvents.replace(i,modelWorkoutList);
         }
+    }
+}
+
+void WorkoutWindow::ShiftListUp()
+{
+    ChangeListOrder(true);
+}
+
+void WorkoutWindow::ShiftListDown()
+{
+    ChangeListOrder(false);
+}
+
+void WorkoutWindow::ChangeListOrder(bool shiftUp)
+{
+    int currentIndex = WorkoutList->currentRow();
+    int listSize = WorkoutList->count();
+    int newIndex = 0;
+    if ((shiftUp == true) && (currentIndex != 0))
+    {
+       newIndex = currentIndex - 1;
+    }
+    else if ((shiftUp == false) && (currentIndex != (listSize-1)))
+    {
+       newIndex = currentIndex + 1;
+    }
+    else
+    {
+        //Do nothing, invalid move
+        return;
+    }
+    //Now we are going to update the list and the events
+    //The list
+    QListWidgetItem * currentItem = WorkoutList->item(currentIndex);
+    QListWidgetItem * nextItem = WorkoutList->takeItem(newIndex);
+    WorkoutList->insertItem(currentIndex, nextItem);
+    WorkoutList->insertItem(newIndex, currentItem);
+
+    //Now the events
+    for (int i = 0; i < LoadedEvents.size(); i++)
+    {
+        QList<RunningEvent> currentAthleteEvents = LoadedEvents.at(i);
+        //Change their event order
+        RunningEvent firstEvent = currentAthleteEvents.at(currentIndex);
+        firstEvent.setEventOrderNumber(newIndex);
+        RunningEvent secondEvent = currentAthleteEvents.at(newIndex);
+        secondEvent.setEventOrderNumber(currentIndex);
+        //Change list order
+        currentAthleteEvents.replace(currentIndex,secondEvent);
+        currentAthleteEvents.replace(newIndex,firstEvent);
+        //Save changes to the main list
+        LoadedEvents.replace(i,currentAthleteEvents);
     }
 }
 

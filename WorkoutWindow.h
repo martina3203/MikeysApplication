@@ -14,11 +14,14 @@ class WorkoutWindow : public QDialog, public Ui_WorkoutWindow
 public:
     WorkoutWindow(RunnerDatabase*,RunningProfile,QDate,QList< QList<RunningEvent> >);
     void findModelWorkout();
+    void ChangeListOrder(bool);
     ~WorkoutWindow();
 
 public slots:
     void AddWorkout();
     void UpdateWorkoutList();
+    void ShiftListUp();
+    void ShiftListDown();
     void SaveChangesToDatabase();
 
 private:
