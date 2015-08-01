@@ -47,6 +47,9 @@ void WorkoutWindow::AddWorkout()
         //now update the list for this athlete
         LoadedEvents.replace(i,athleteEvents);
     }
+
+    //Update WorkoutList after change
+    UpdateWorkoutList();
 }
 
 void WorkoutWindow::findModelWorkout()
@@ -81,7 +84,9 @@ void WorkoutWindow::findModelWorkout()
             for (int j = 0; j < modelWorkoutList.size(); j++)
             {
                 RunningEvent currentEvent = modelWorkoutList.at(j);
+                //Reset attributes of the current event
                 currentEvent.setAthleteID(athleteID);
+                currentEvent.setID(0);
                 RunningTime defaultTime;
                 currentEvent.setTime(defaultTime);
                 modelWorkoutList.replace(j,currentEvent);
@@ -128,7 +133,7 @@ void WorkoutWindow::SaveChangesToDatabase()
         {
             RunningEvent currentEvent = currentAthleteEvents.at(j);
             int eventID = currentEvent.returnID();
-            //Doesn't exist in database, now add it
+            //If it doesn't exist in database, now add it
             if (eventID == 0)
             {
                 if (!TheDatabase->addEvent(currentEvent))
@@ -136,7 +141,7 @@ void WorkoutWindow::SaveChangesToDatabase()
                     qDebug() << "Unable to add Event to Database from Workout Window";
                 }
             }
-            //Update it's entry in the database
+            //Or update it's entry in the database
             else
             {
                 if (!TheDatabase->updateEvent(currentEvent))
