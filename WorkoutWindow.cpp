@@ -20,18 +20,21 @@ WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile se
     UpdateWorkoutList();
 
     //Form connections
-    connect(AddButton,SIGNAL(clicked()),this,SLOT(AddWorkout()));
+    connect(AddButton,SIGNAL(clicked()),this,SLOT(AddEvent()));
     connect(buttonBox,SIGNAL(accepted()),this,SLOT(SaveChangesToDatabase()));
     connect(buttonBox,SIGNAL(rejected()),this,SLOT(close()));
     //Up and Down buttons
     connect(UpButton,SIGNAL(clicked(bool)),this,SLOT(ShiftListUp()));
     connect(DownButton,SIGNAL(clicked(bool)),this,SLOT(ShiftListDown()));
+    //Delete Button
+    connect(DeleteButton,SIGNAL(clicked(bool)),this,SLOT(DeleteEvent()));
 }
 
 //Adds a workout to every athletes list
-void WorkoutWindow::AddWorkout()
+void WorkoutWindow::AddEvent()
 {
     QString workoutName = EventNameLineEdit->text();
+    EventNameLineEdit->clear();
     //Creating an entry for every athlete in their appropriate list
     QList<Athlete> athleteList = CurrentProfile.returnAllAthletes();
     //Set up event with base information
@@ -52,6 +55,37 @@ void WorkoutWindow::AddWorkout()
 
     //Update WorkoutList after change
     UpdateWorkoutList();
+}
+
+//Deletes the selected event
+void WorkoutWindow::DeleteEvent()
+{
+    //Removes the selected event from both the list and every athlete after the save button is pressed
+    int currentIndex = WorkoutList->currentRow();
+    //If there is something in the list
+    if (currentIndex != -1)
+    {
+        //Remove from list
+        WorkoutList->takeItem(currentIndex);
+        //Remove from all athlete workouts
+        for (int i = 0; i < LoadedEvents.size(); i++)
+        {
+            QList<RunningEvent> currentEvents = LoadedEvents.at(i);
+            RunningEvent eventToBeDeleted = currentEvents.at(currentIndex);
+            //Ready for it to be deleted from the database
+            EventsToBeRemoved.append(eventToBeDeleted);
+            //Remove the event
+            currentEvents.removeAt(currentIndex);
+            //Update the event number of every event after it
+            for (int j = currentIndex; j < currentEvents.size(); j++)
+            {
+                RunningEvent thisEvent = currentEvents.at(j);
+                thisEvent.setEventOrderNumber(j);
+                currentEvents.replace(j,thisEvent);
+            }
+            LoadedEvents.replace(i,currentEvents);
+        }
+    }
 }
 
 //Finds a workout that is listed for this group on this day
@@ -211,7 +245,7 @@ void WorkoutWindow::SaveChangesToDatabase()
     for (int i = 0; i < EventsToBeRemoved.size(); i++)
     {
         RunningEvent currentEvent = EventsToBeRemoved.at(i);
-        int eventID = currentEvent.returnAthleteID();
+        int eventID = currentEvent.returnID();
         if (eventID != 0)
         {
             if (!TheDatabase->removeEvent(eventID))

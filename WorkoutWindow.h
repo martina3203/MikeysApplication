@@ -18,7 +18,8 @@ public:
     ~WorkoutWindow();
 
 public slots:
-    void AddWorkout();
+    void AddEvent();
+    void DeleteEvent();
     void UpdateWorkoutList();
     void ShiftListUp();
     void ShiftListDown();
