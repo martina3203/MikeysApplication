@@ -37,13 +37,24 @@
         <layout class="QVBoxLayout" name="ListLayout">
          <item>
           <widget class="QLabel" name="ListLabel">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>Workout Events:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="WorkoutList"/>
+          <widget class="QListWidget" name="WorkoutList">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="ListButtonLayout">
