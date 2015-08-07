@@ -44,6 +44,10 @@ private:
     static const QString showAllAthleteString;
     //Boolean that determines if changes were made
     bool ChangesMade;
+
+    //This is for restoring values
+    int ProfileComboBoxIndex;
+    QDate SavedDate;
 };
 
 #endif // MainWindow_H

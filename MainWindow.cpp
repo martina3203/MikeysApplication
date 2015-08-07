@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {   
     TheDatabase = NULL;
     ChangesMade = false;
+    ProfileComboBoxIndex = -1;
 
     //Setup designed UI
     setupUi(this);
@@ -17,12 +18,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Updates dateEdit to be today's date
     DateEdit->setDate(QDate::currentDate());
+    SavedDate = QDate::currentDate();
 
     //Update Profile Listing ComboBox and if there is a profile existing, load it.
     loadProfiles();
     if (ProfileListing.size() != 0)
     {
         CurrentProfile = ProfileListing.at(0);
+        ProfileComboBoxIndex = 0;
         profileChange();
     }
 
@@ -43,21 +46,87 @@ MainWindow::MainWindow(QWidget *parent) :
 //Called to load all relevant information involved with a new profle
 void MainWindow::profileChange()
 {
+    if (ChangesMade)
+    {
+        QMessageBox saveAlert;
+        saveAlert.setText("Changes Have Been Made");
+        saveAlert.setInformativeText("You are about to change the profile without saving.");
+        saveAlert.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        saveAlert.setDefaultButton(QMessageBox::Cancel);
+        int returnValue = saveAlert.exec();
+        switch (returnValue)
+        {
+            //Save new information
+            case QMessageBox::Save:
+                saveChangesToDatabase();
+                break;
+            //Ignore changes and reload information
+            case QMessageBox::Discard:
+                ChangesMade = false;
+                SaveChangesButton->setEnabled(false);
+                break;
+            //Do nothing and exit function
+            case QMessageBox::Cancel:
+                disconnect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(profileChange()));
+                SelectProfileComboBox->setCurrentIndex(ProfileComboBoxIndex);
+                connect(SelectProfileComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(profileChange()));
+                return;
+                break;
+        }
+    }
+    //Carries out changes if it passes through Switch Statement
     loadAthletes();
     loadEvents();
     setupRowAndColumnHeaders();
     fillTable();
     displayEventsForSelection();
+
+    //Reset flags
+    ChangesMade = false;
+    SaveChangesButton->setEnabled(false);
+    ProfileComboBoxIndex = SelectProfileComboBox->currentIndex();
 }
 
 //Called to load all relevant information involved with a new date
 void MainWindow::dateChange()
 {
     //Then we shall reload all the necessary information
+    if (ChangesMade)
+    {
+        QMessageBox saveAlert;
+        saveAlert.setText("Changes Have Been Made");
+        saveAlert.setInformativeText("You are about to change the date without saving.");
+        saveAlert.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        saveAlert.setDefaultButton(QMessageBox::Cancel);
+        int returnValue = saveAlert.exec();
+        switch (returnValue)
+        {
+            //Save new information
+            case QMessageBox::Save:
+                saveChangesToDatabase();
+                break;
+            //Ignore changes and reload information
+            case QMessageBox::Discard:
+                ChangesMade = false;
+                SaveChangesButton->setEnabled(false);
+                break;
+            //Return the date and exit function
+            case QMessageBox::Cancel:
+                disconnect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(dateChange()));
+                DateEdit->setDate(SavedDate);
+                connect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(dateChange()));
+                return;
+        }
+    }
     loadEvents();
     setupRowAndColumnHeaders();
     fillTable();
     displayEventsForSelection();
+
+    //Reset flags
+    ChangesMade = false;
+    SaveChangesButton->setEnabled(false);
+    SavedDate = DateEdit->date();
 }
 
 //Loads profiles to viewed in the SelectProfileComboBox
