@@ -74,6 +74,7 @@ void MainWindow::profileChange()
                 break;
         }
     }
+
     //Carries out changes if it passes through Switch Statement
     loadAthletes();
     loadEvents();
@@ -118,6 +119,8 @@ void MainWindow::dateChange()
                 return;
         }
     }
+
+    //Reload information
     loadEvents();
     setupRowAndColumnHeaders();
     fillTable();
@@ -316,6 +319,11 @@ void MainWindow::fillTable()
             //Else it will default to a value of 0 which will still be displayed
             //Create and add this entry to table
             QStringTime = eventTime.toString();
+            //If the value is default, leave it blank
+            if (QStringTime == "00")
+            {
+                QStringTime = "";
+            }
             QTableWidgetItem * newTableItem = new QTableWidgetItem(QStringTime);
             EntriesTable->setItem(i,j,newTableItem);
         }
@@ -450,6 +458,29 @@ void MainWindow::toggleChangesMade()
 
 void MainWindow::closeEvent(QCloseEvent* theEvent)
 {
+    if (ChangesMade)
+    {
+        QMessageBox saveAlert;
+        saveAlert.setText("Changes Have Been Made");
+        saveAlert.setInformativeText("You are about to exit the program without saving.");
+        saveAlert.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        saveAlert.setDefaultButton(QMessageBox::Cancel);
+        int returnValue = saveAlert.exec();
+        switch (returnValue)
+        {
+            //Save new information
+            case QMessageBox::Save:
+                saveChangesToDatabase();
+                break;
+            //Discard and Exit
+            case QMessageBox::Discard:
+                break;
+            //Cancel
+            case QMessageBox::Cancel:
+            theEvent -> ignore();
+            return;
+        }
+    }
     theEvent -> accept();
 }
 
