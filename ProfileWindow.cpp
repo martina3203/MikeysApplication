@@ -62,7 +62,7 @@ void ProfileWindow::addNewProfile()
     }
     else
     {
-        //Display empty string message
+        ProfileLineEdit -> clear();
         return;
     }
 }

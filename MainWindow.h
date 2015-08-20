@@ -28,6 +28,7 @@ public slots:
     void dateChange();
     void openProfileManager();
     void openWorkoutManager();
+    void openAbout();
     void displayEventsForSelection();
     void toggleChangesMade();
     void saveChangesToDatabase();
