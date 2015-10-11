@@ -7,7 +7,7 @@
 RunningTime::RunningTime()
 {
     //Constructor
-    Miliseconds = 0;
+    Milliseconds = 0;
     Seconds = 0;
     Minutes = 0;
     Hours = 0;
@@ -16,7 +16,7 @@ RunningTime::RunningTime()
 RunningTime::RunningTime(QString timeString)
 {
     //Set defaults
-    Miliseconds = 0;
+    Milliseconds = 0;
     Seconds = 0;
     Minutes = 0;
     Hours = 0;
@@ -100,7 +100,7 @@ RunningTime::RunningTime(QString timeString)
             timeSegment = timeSegment + timeString.at(i);
         }
         convertedNumber = timeSegment.toInt();
-        Miliseconds = convertedNumber;
+        Milliseconds = convertedNumber;
     }
     //Otherwise it remains zero, by default
 }
@@ -117,7 +117,7 @@ int RunningTime::testFunction()
     testTime.setSeconds(02);
     testTime.setMinutes(56);
     testTime.setHours(3);
-    testTime.setMiliseconds(5);
+    testTime.setMilliseconds(5);
     std::cout << "Cout Ouput: ";
     std::cout << testTime << std::endl;
 
@@ -126,8 +126,8 @@ int RunningTime::testFunction()
     std::cout << "Testing optional Hours segment: " << testTime << std::endl;
 
     //Testing optional Milisecond component
-    testTime.setMiliseconds(0);
-    std::cout << "Testing optional MiliSeconds segment: " << testTime << std::endl;
+    testTime.setMilliseconds(0);
+    std::cout << "Testing optional Milliseconds segment: " << testTime << std::endl;
 
     //Test Function Overloading
     RunningTime test1;
@@ -180,7 +180,7 @@ int RunningTime::testFunction()
     return 1;
 }
 
-void RunningTime::setMiliseconds(int newMili)
+void RunningTime::setMilliseconds(int newMili)
 {
     int currentMSeconds = newMili;
     while (currentMSeconds >= 100)
@@ -188,7 +188,7 @@ void RunningTime::setMiliseconds(int newMili)
         Seconds++;
         currentMSeconds = currentMSeconds - 100;
     }
-    Miliseconds = currentMSeconds;
+    Milliseconds = currentMSeconds;
 }
 
 void RunningTime::setSeconds(int newSeconds)
@@ -224,7 +224,7 @@ QString RunningTime::toString()
     QString hoursString = QString::number(Hours);
     QString minutesString = QString::number(Minutes);
     QString secondsString = QString::number(Seconds);
-    QString milisecondsString = QString::number(Miliseconds);
+    QString MillisecondsString = QString::number(Milliseconds);
     //Build strings
     //Omit certain fields if empty.
     if (Hours != 0)
@@ -253,16 +253,16 @@ QString RunningTime::toString()
     }
     returnString = returnString + secondsString;
 
-    //Omit miliseconds if zero
-    if (Miliseconds != 0)
+    //Omit Milliseconds if zero
+    if (Milliseconds != 0)
     {
         returnString = returnString + ".";
         //Add zero if necessary
-        if (Miliseconds < 10)
+        if (Milliseconds < 10)
         {
-            milisecondsString = "0" + milisecondsString;
+            MillisecondsString = "0" + MillisecondsString;
         }
-        returnString = returnString + milisecondsString;
+        returnString = returnString + MillisecondsString;
     }
     return returnString;
 }
@@ -272,9 +272,9 @@ void RunningTime::setHours(int newHours)
     Hours = newHours;
 }
 
-int RunningTime::returnMiliseconds()
+int RunningTime::returnMilliseconds()
 {
-    return Miliseconds;
+    return Milliseconds;
 }
 
 int RunningTime::returnSeconds()
@@ -294,7 +294,7 @@ int RunningTime::returnHours()
 
 bool RunningTime::operator == (RunningTime anotheRunningTime)
 {
-    if (this -> returnMiliseconds() == anotheRunningTime.returnMiliseconds())
+    if (this -> returnMilliseconds() == anotheRunningTime.returnMilliseconds())
     {
         if (this -> returnSeconds() == anotheRunningTime.returnSeconds())
         {
@@ -312,7 +312,7 @@ bool RunningTime::operator == (RunningTime anotheRunningTime)
 
 bool RunningTime::operator != (RunningTime anotheRunningTime)
 {
-    if (this -> returnMiliseconds() != anotheRunningTime.returnMiliseconds() ||
+    if (this -> returnMilliseconds() != anotheRunningTime.returnMilliseconds() ||
         this -> returnSeconds() != anotheRunningTime.returnSeconds() ||
         this -> returnMinutes() != anotheRunningTime.returnMinutes() ||
         this -> returnHours() != anotheRunningTime.returnHours())
@@ -324,7 +324,7 @@ bool RunningTime::operator != (RunningTime anotheRunningTime)
 
 bool RunningTime::operator < (RunningTime anotheRunningTime)
 {
-    if (this -> returnMiliseconds() < anotheRunningTime.returnMiliseconds())
+    if (this -> returnMilliseconds() < anotheRunningTime.returnMilliseconds())
     {
         return true;
     }
@@ -346,7 +346,7 @@ bool RunningTime::operator < (RunningTime anotheRunningTime)
 
 bool RunningTime::operator > (RunningTime anotheRunningTime)
 {
-    if (this -> returnMiliseconds() > anotheRunningTime.returnMiliseconds())
+    if (this -> returnMilliseconds() > anotheRunningTime.returnMilliseconds())
     {
         return true;
     }
@@ -384,13 +384,13 @@ std::ostream& operator << (std::ostream& Output,RunningTime theTime)
     Output.fill('0');
     //Seconds component
     Output << theTime.returnSeconds();
-    //MiliSeconds portion, which is also optional
-    if (theTime.returnMiliseconds() != 0)
+    //Milliseconds portion, which is also optional
+    if (theTime.returnMilliseconds() != 0)
     {
         Output << ".";
         Output.width(2);
         Output.fill('0');
-        Output << theTime.returnMiliseconds();
+        Output << theTime.returnMilliseconds();
     }
     return Output;
 }
@@ -477,7 +477,7 @@ RunningTime convertStringToTime(QString timeString)
             timeSegment = timeSegment + timeString.at(i);
         }
         convertedNumber = timeSegment.toInt();
-        convertedTime.setMiliseconds(convertedNumber);
+        convertedTime.setMilliseconds(convertedNumber);
     }
     //Otherwise it remains zero, by default
     return convertedTime;

@@ -19,12 +19,12 @@ class RunningTime
         RunningTime(QString);
         int testFunction();
         virtual ~RunningTime();
-        void setMiliseconds(int);
+        void setMilliseconds(int);
         void setSeconds(int);
         void setMinutes(int);
         void setHours(int);
         QString toString();
-        int returnMiliseconds();
+        int returnMilliseconds();
         int returnSeconds();
         int returnMinutes();
         int returnHours();
@@ -34,7 +34,7 @@ class RunningTime
         bool operator >(RunningTime);
     protected:
     private:
-        int Miliseconds;
+        int Milliseconds;
         int Seconds;
         int Minutes;
         int Hours;

@@ -19,6 +19,9 @@ WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile se
     findModelWorkout();
     UpdateWorkoutList();
 
+    //Set the default button to be the Add Event Button
+    AddButton->setFocus();
+
     //Form connections
     connect(AddButton,SIGNAL(clicked()),this,SLOT(AddEvent()));
     connect(buttonBox,SIGNAL(accepted()),this,SLOT(SaveChangesToDatabase()));
@@ -28,6 +31,7 @@ WorkoutWindow::WorkoutWindow(RunnerDatabase * databasePointer, RunningProfile se
     connect(DownButton,SIGNAL(clicked(bool)),this,SLOT(ShiftListDown()));
     //Delete Button
     connect(DeleteButton,SIGNAL(clicked(bool)),this,SLOT(DeleteEvent()));
+    connect(EventNameLineEdit,SIGNAL(editingFinished()),AddButton,SLOT(setFocus()));
 }
 
 //Adds a workout to every athletes list
@@ -55,6 +59,9 @@ void WorkoutWindow::AddEvent()
 
     //Update WorkoutList after change
     UpdateWorkoutList();
+    //Finally, set current item in the list to be the new item
+    int listSize = WorkoutList->count();
+    WorkoutList->setCurrentRow(listSize-1);
 }
 
 //Deletes the selected event
