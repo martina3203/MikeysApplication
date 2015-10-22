@@ -23,7 +23,8 @@ SOURCES +=\
     Athlete.cpp \
     RunnerDatabase.cpp \
     WorkoutWindow.cpp \
-    utility.cpp
+    utility.cpp \
+    PrintingWindow.cpp
 
 HEADERS  += \
     Athlete.h \
@@ -34,9 +35,11 @@ HEADERS  += \
     RunningEvent.h \
     RunnerDatabase.h \
     WorkoutWindow.h \
-    utility.h
+    utility.h \
+    PrintingWindow.h
 
 FORMS += \
     MainWindow.ui \
     ProfileWindow.ui \
-    WorkoutWindow.ui
+    WorkoutWindow.ui \
+    PrintingWindow.ui
