@@ -6,6 +6,7 @@
 #include "ProfileWindow.h"
 #include "RunnerDatabase.h"
 #include "WorkoutWindow.h"
+#include "PrintingWindow.h"
 #include "ui_MainWindow.h"
 
 class MainWindow : public QMainWindow, public Ui_MainWindow
@@ -28,6 +29,7 @@ public slots:
     void dateChange();
     void openProfileManager();
     void openWorkoutManager();
+    void openPrintingManager();
     void openAbout();
     void displayEventsForSelection();
     void toggleChangesMade();

@@ -2,6 +2,6 @@
 
 PrintingWindow::PrintingWindow()
 {
-
+    //Constructor
+    setupUi(this);
 }
-

@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ActionEdit_Profiles,SIGNAL(triggered(bool)),this,SLOT(openProfileManager()));
     connect(WorkoutButton,SIGNAL(clicked(bool)),this,SLOT(openWorkoutManager()));
     connect(ActionAbout,SIGNAL(triggered(bool)),this,SLOT(openAbout()));
+    connect(PrintButton,SIGNAL(clicked(bool)),this,SLOT(openPrintingManager()));
     //Loads different events when the date is changed on a selected profile
     connect(DateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(dateChange()));
     //Loads Profile/Athletes and events on selection
@@ -380,6 +381,12 @@ void MainWindow::openWorkoutManager()
     }
 }
 
+void MainWindow::openPrintingManager()
+{
+    PrintingWindow printWindow;
+    printWindow.exec();
+}
+
 void MainWindow::openAbout()
 {
     QMessageBox aboutMessage;
@@ -391,7 +398,8 @@ void MainWindow::openAbout()
     aboutMessage.setText("Runner Tracker");
     aboutMessage.setInformativeText(displayString);
     aboutMessage.setStandardButtons(QMessageBox::Ok);
-    int returnValue = aboutMessage.exec();
+    //Show Message
+    aboutMessage.exec();
 }
 
 //Saves all the changes to the Database

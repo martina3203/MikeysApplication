@@ -1,7 +1,6 @@
 #ifndef ProfileWindow_H
 #define ProfileWindow_H
 
-#include <QMainWindow>
 #include <QMessageBox>
 #include <QDialog>
 #include <QString>

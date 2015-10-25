@@ -1,8 +1,9 @@
 #ifndef PRINTINGWINDOW_H
 #define PRINTINGWINDOW_H
 
-#include <QObject>
-#include <QWidget>
+#include <QDialog>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 #include "ui_PrintingWindow.h"
 
 class PrintingWindow: public QDialog, public Ui_PrintingDialog
@@ -11,6 +12,11 @@ class PrintingWindow: public QDialog, public Ui_PrintingDialog
 
 public:
     PrintingWindow();
+
+public slots:
+
+private:
+    QPrinter thePrinter;
 };
 
 #endif // PRINTINGWINDOW_H
