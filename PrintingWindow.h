@@ -6,12 +6,12 @@
 #include <QtPrintSupport/QPrintDialog>
 #include "ui_PrintingWindow.h"
 
-class PrintingWindow: public QDialog, public Ui_PrintingDialog
+class PrintingWindow : public QDialog, public Ui_PrintingDialog
 {
     Q_OBJECT
 
 public:
-    PrintingWindow();
+    PrintingWindow(QWidget *parent = 0);
 
 public slots:
 
