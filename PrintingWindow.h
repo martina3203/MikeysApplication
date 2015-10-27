@@ -2,6 +2,8 @@
 #define PRINTINGWINDOW_H
 
 #include <QDialog>
+#include <QTableWidget>
+#include <QPainter>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include "ui_PrintingWindow.h"
@@ -11,12 +13,16 @@ class PrintingWindow : public QDialog, public Ui_PrintingDialog
     Q_OBJECT
 
 public:
-    PrintingWindow(QWidget *parent = 0);
+    PrintingWindow(QTableWidget * theTable, QWidget *parent = 0);
+    void addTable();
+    void configurePageSettings();
 
 public slots:
+    void executePrintJob();
 
 private:
-    QPrinter thePrinter;
+    QPrinter ThePrinter;
+    QTableWidget * Table;
 };
 
 #endif // PRINTINGWINDOW_H

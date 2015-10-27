@@ -383,7 +383,7 @@ void MainWindow::openWorkoutManager()
 
 void MainWindow::openPrintingManager()
 {
-    PrintingWindow printWindow;
+    PrintingWindow printWindow(EntriesTable,this);
     printWindow.exec();
 }
 
