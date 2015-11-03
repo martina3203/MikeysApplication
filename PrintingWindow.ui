@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Printing</string>
+   <string>Printing Current Table</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Press OK to Print</string>
+        <string>Ensure that the Main Window is Maximized to ensure proper print job.</string>
        </property>
       </widget>
      </item>

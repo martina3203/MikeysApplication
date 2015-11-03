@@ -15,8 +15,15 @@ void PrintingWindow::executePrintJob()
     //Intial setup
     configurePageSettings();
 
+    //Add Text
+    ThePainter.begin(&ThePrinter);
+    ThePainter.drawText(10,10,"THE DATE");
+    ThePainter.drawText(10,25,"THE PROFILE");
+
     //Add material to page
     addTable();
+
+    ThePainter.end();
 
     //Bring up Print Dialog to select the proper printer
     QPrintDialog dialog(&ThePrinter, this);
@@ -28,29 +35,25 @@ void PrintingWindow::executePrintJob()
 
 void PrintingWindow::addTable()
 {
-    //Set up Painter
-    QPainter thePainter;
-    thePainter.begin(&ThePrinter);
+    //Draw Table
     Table->resizeRowsToContents();
     Table->resizeColumnsToContents();
     double xscale = ThePrinter.pageRect().width()/double(Table->width());
     double yscale = ThePrinter.pageRect().height()/double(Table->height());
     double scale = qMin(xscale, yscale);
-    thePainter.translate(ThePrinter.paperRect().x() + ThePrinter.pageRect().width()/2,
+    ThePainter.translate(ThePrinter.paperRect().x() + ThePrinter.pageRect().width()/2,
                      ThePrinter.paperRect().y() + ThePrinter.pageRect().height()/2);
-    thePainter.scale(scale, scale);
-    thePainter.translate(-width()/1.5, -height()/2);
-
+    ThePainter.scale(scale, scale);
+    ThePainter.translate(-width()/1.5, -height()/2);
     //Render to page
-    Table->render(&thePainter);
-
+    Table->render(&ThePainter);
 }
 
 //Used to set the default attributes of the printer
 void PrintingWindow::configurePageSettings()
 {
     //Set default attributes of printer
-    ThePrinter.setOrientation(QPrinter::Portrait);
+    ThePrinter.setOrientation(QPrinter::Landscape);
     ThePrinter.setPaperSize(QPrinter::Legal);
     ThePrinter.setOutputFileName("printjob.pdf");
 }

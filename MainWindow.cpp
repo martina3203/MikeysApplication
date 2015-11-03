@@ -10,8 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ChangesMade = false;
     ProfileComboBoxIndex = -1;
 
-    //Setup designed UI
+    //Setup designed UI and maximize
     setupUi(this);
+    showMaximized();
 
     //Let's build a database
     TheDatabase = new RunnerDatabase;

@@ -22,6 +22,7 @@ public slots:
 
 private:
     QPrinter ThePrinter;
+    QPainter ThePainter;
     QTableWidget * Table;
 };
 
