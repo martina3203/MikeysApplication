@@ -384,7 +384,7 @@ void MainWindow::openWorkoutManager()
 
 void MainWindow::openPrintingManager()
 {
-    PrintingWindow printWindow(EntriesTable,this);
+    PrintingWindow printWindow(EntriesTable,DateEdit->date(),CurrentProfile.returnName(),this);
     printWindow.exec();
 }
 
@@ -446,7 +446,6 @@ void MainWindow::saveChangesToDatabase()
             //Update the preexisting list
             else
             {
-                qDebug() << "Commence Updating of List";
                 for (int j = 0; j < columns; j++)
                 {
                     RunningEvent currentEvent = workoutList.at(j);
