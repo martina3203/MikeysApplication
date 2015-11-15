@@ -401,8 +401,16 @@ RunningTime convertStringToTime(QString timeString)
     //This function will parse through the strings and study the format for it and construct a RunningTime object
     //that contains the given information
     //Information is gathered in segments between each of the different punctation marks
+
     RunningTime convertedTime;
     QString timeSegment;
+    //This handles the empty string condition
+    if (timeString.isEmpty())
+    {
+        //Return a default time
+        return convertedTime;
+    }
+
     int colonCounter = 0;
     bool periodFound = false;
     //First we parse to see how many colons and periods there are

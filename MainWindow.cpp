@@ -446,6 +446,7 @@ void MainWindow::saveChangesToDatabase()
             //Update the preexisting list
             else
             {
+                qDebug() << "Commence Updating of List";
                 for (int j = 0; j < columns; j++)
                 {
                     RunningEvent currentEvent = workoutList.at(j);
@@ -466,7 +467,7 @@ void MainWindow::saveChangesToDatabase()
             //Update changes to the list
             CurrentEventListing.replace(i,workoutList);
         }
-
+        qDebug() << "Save Complete";
         //Reset save flag
         ChangesMade = false;
         SaveChangesButton->setEnabled(false);
